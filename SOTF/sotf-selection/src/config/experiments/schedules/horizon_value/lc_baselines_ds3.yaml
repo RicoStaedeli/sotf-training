@@ -1,0 +1,84 @@
+# Run: python sotf-selection/schedule.py sotf-selection/src/config/experiments/schedules/horizon_value/lc_baselines_ds3.yaml
+
+schedule_name: horizon_value/lc_baselines_ds3
+batch_config: horizon_value/lc_baselines_ds3.yaml
+
+sotf_sweeps:
+  # start_epoch=5
+  - label: se05_sr10_i5
+    overrides:
+      selection.start_epoch: 5
+      selection.survival_rate: 0.1
+      selection.interval: 5
+  - label: se05_sr25_i5
+    overrides:
+      selection.start_epoch: 5
+      selection.survival_rate: 0.25
+      selection.interval: 5
+  - label: se05_sr50_i5
+    overrides:
+      selection.start_epoch: 5
+      selection.survival_rate: 0.5
+      selection.interval: 5
+  - label: se05_sr75_i5
+    overrides:
+      selection.start_epoch: 5
+      selection.survival_rate: 0.75
+      selection.interval: 5
+  - label: se05_sr90_i5
+    overrides:
+      selection.start_epoch: 5
+      selection.survival_rate: 0.9
+      selection.interval: 5
+  # start_epoch=10
+  - label: se10_sr10_i5
+    overrides:
+      selection.start_epoch: 10
+      selection.survival_rate: 0.1
+      selection.interval: 5
+  - label: se10_sr25_i5
+    overrides:
+      selection.start_epoch: 10
+      selection.survival_rate: 0.25
+      selection.interval: 5
+  - label: se10_sr50_i5
+    overrides:
+      selection.start_epoch: 10
+      selection.survival_rate: 0.5
+      selection.interval: 5
+  - label: se10_sr75_i5
+    overrides:
+      selection.start_epoch: 10
+      selection.survival_rate: 0.75
+      selection.interval: 5
+  - label: se10_sr90_i5
+    overrides:
+      selection.start_epoch: 10
+      selection.survival_rate: 0.9
+      selection.interval: 5
+  # start_epoch=25
+  - label: se25_sr10_i5
+    overrides:
+      selection.start_epoch: 25
+      selection.survival_rate: 0.1
+      selection.interval: 5
+  - label: se25_sr25_i5
+    overrides:
+      selection.start_epoch: 25
+      selection.survival_rate: 0.25
+      selection.interval: 5
+  - label: se25_sr50_i5
+    overrides:
+      selection.start_epoch: 25
+      selection.survival_rate: 0.5
+      selection.interval: 5
+  - label: se25_sr75_i5
+    overrides:
+      selection.start_epoch: 25
+      selection.survival_rate: 0.75
+      selection.interval: 5
+  - label: se25_sr90_i5
+    overrides:
+      selection.start_epoch: 25
+      selection.survival_rate: 0.9
+      selection.interval: 5

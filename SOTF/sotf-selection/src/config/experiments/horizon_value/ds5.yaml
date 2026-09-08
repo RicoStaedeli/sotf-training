@@ -1,0 +1,327 @@
+common_overrides:
+  data.target_column: test_acc
+  sequence.target_mode: horizon_value
+  sequence.horizon: 5
+
+predictor:
+  name: naive
+  strategy: current_target
+
+runs:
+  - experiment_name: naive_baseline
+    predictor:
+      name: naive
+      strategy: current_target
+    overrides:
+      data.pt_path: metric-prediction/cache/weight_statistic_datasets/5_cifar10_Resnet18_width_2-256_full_all_metrics_long/weight_statistics_test.pt
+      data.pt_val_path: metric-prediction/cache/weight_statistic_datasets/5_cifar10_Resnet18_width_2-256_full_all_metrics_long/weight_statistics_val.pt
+
+  - experiment_name: xgboost_perf_only
+    predictor:
+      name: forecast_model
+      use_bundle_feature_config: true
+      use_bundle_sequence_config: true
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/5_cifar10_Resnet18_width_2-256_full_all_metrics_long__prepared_dataset.parquet
+      data.model_ids_from_pt_path: metric-prediction/cache/weight_statistic_datasets/5_cifar10_Resnet18_width_2-256_full_all_metrics_long/weight_statistics_test.pt
+      data.model_ids_from_pt_val_path: metric-prediction/cache/weight_statistic_datasets/5_cifar10_Resnet18_width_2-256_full_all_metrics_long/weight_statistics_val.pt
+      predictor.model_bundle_path: metric-prediction/outputs/forecasting/weight_statistics/horizon/xgboost/ds5/results/ds5_ws_h5_lag3_delta_perf_only/model_bundle.pkl
+      predictor.used_features_path: metric-prediction/outputs/forecasting/weight_statistics/horizon/xgboost/ds5/results/ds5_ws_h5_lag3_delta_perf_only/used_features.json
+
+  - experiment_name: online_xgboost_perf_only
+    predictor:
+      name: xgboost
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/5_cifar10_Resnet18_width_2-256_full_all_metrics_long__prepared_dataset.parquet
+      data.model_ids_from_pt_path: metric-prediction/cache/weight_statistic_datasets/5_cifar10_Resnet18_width_2-256_full_all_metrics_long/weight_statistics_test.pt
+      data.model_ids_from_pt_val_path: metric-prediction/cache/weight_statistic_datasets/5_cifar10_Resnet18_width_2-256_full_all_metrics_long/weight_statistics_val.pt
+      predictor.min_train_rows: 10
+      predictor.min_train_models: 2
+      sequence.min_history: 4
+      predictor.fallback_strategy: current_target
+      predictor.include_observed_metrics: true
+      predictor.observed_metric_columns: [current_target, test_acc, train_acc, test_loss, train_loss]
+      features.include_model_metrics: false
+      features.include_layer_metrics: false
+
+  - experiment_name: mlp_perf_only
+    predictor:
+      name: forecast_model
+      use_bundle_feature_config: true
+      use_bundle_sequence_config: true
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/5_cifar10_Resnet18_width_2-256_full_all_metrics_long__prepared_dataset.parquet
+      data.model_ids_from_pt_path: metric-prediction/cache/weight_statistic_datasets/5_cifar10_Resnet18_width_2-256_full_all_metrics_long/weight_statistics_test.pt
+      data.model_ids_from_pt_val_path: metric-prediction/cache/weight_statistic_datasets/5_cifar10_Resnet18_width_2-256_full_all_metrics_long/weight_statistics_val.pt
+      predictor.model_bundle_path: metric-prediction/outputs/forecasting/weight_statistics/horizon/mlp/ds5/results/ds5_ws_h5_lag3_delta_perf_only/model_bundle.pt
+      predictor.used_features_path: metric-prediction/outputs/forecasting/weight_statistics/horizon/mlp/ds5/results/ds5_ws_h5_lag3_delta_perf_only/artifacts/used_features.json
+
+  - experiment_name: weight_statistics_xgboost
+    predictor:
+      name: forecast_model
+      use_bundle_feature_config: true
+      use_bundle_sequence_config: true
+    overrides:
+      data.pt_path: metric-prediction/cache/weight_statistic_datasets/5_cifar10_Resnet18_width_2-256_full_all_metrics_long/weight_statistics_test.pt
+      data.pt_val_path: metric-prediction/cache/weight_statistic_datasets/5_cifar10_Resnet18_width_2-256_full_all_metrics_long/weight_statistics_val.pt
+      predictor.model_bundle_path: metric-prediction/outputs/forecasting/weight_statistics/horizon/xgboost/ds5/results/ds5_ws_h5_lag3_delta_layer_xgb/model_bundle.pkl
+      predictor.used_features_path: metric-prediction/outputs/forecasting/weight_statistics/horizon/xgboost/ds5/results/ds5_ws_h5_lag3_delta_layer_xgb/used_features.json
+
+  - experiment_name: weight_statistics_xgboost_with_perf
+    predictor:
+      name: forecast_model
+      use_bundle_feature_config: true
+      use_bundle_sequence_config: true
+    overrides:
+      data.pt_path: metric-prediction/cache/weight_statistic_datasets/5_cifar10_Resnet18_width_2-256_full_all_metrics_long/weight_statistics_test.pt
+      data.pt_val_path: metric-prediction/cache/weight_statistic_datasets/5_cifar10_Resnet18_width_2-256_full_all_metrics_long/weight_statistics_val.pt
+      predictor.model_bundle_path: metric-prediction/outputs/forecasting/weight_statistics/horizon/xgboost/ds5/results/ds5_ws_h5_lag3_delta_layer_xgb_with_perf/model_bundle.pkl
+      predictor.used_features_path: metric-prediction/outputs/forecasting/weight_statistics/horizon/xgboost/ds5/results/ds5_ws_h5_lag3_delta_layer_xgb_with_perf/used_features.json
+
+  - experiment_name: weight_statistics_online_xgboost
+    predictor:
+      name: xgboost
+    overrides:
+      data.pt_path: metric-prediction/cache/weight_statistic_datasets/5_cifar10_Resnet18_width_2-256_full_all_metrics_long/weight_statistics_test.pt
+      data.pt_val_path: metric-prediction/cache/weight_statistic_datasets/5_cifar10_Resnet18_width_2-256_full_all_metrics_long/weight_statistics_val.pt
+      predictor.min_train_rows: 10
+      predictor.min_train_models: 2
+      sequence.min_history: 4
+      predictor.fallback_strategy: current_target
+      predictor.include_observed_metrics: true
+      predictor.observed_metric_columns: []
+      features.metric_families: [distribution]
+
+  - experiment_name: weight_statistics_online_xgboost_with_perf
+    predictor:
+      name: xgboost
+    overrides:
+      data.pt_path: metric-prediction/cache/weight_statistic_datasets/5_cifar10_Resnet18_width_2-256_full_all_metrics_long/weight_statistics_test.pt
+      data.pt_val_path: metric-prediction/cache/weight_statistic_datasets/5_cifar10_Resnet18_width_2-256_full_all_metrics_long/weight_statistics_val.pt
+      predictor.min_train_rows: 10
+      predictor.min_train_models: 2
+      sequence.min_history: 4
+      predictor.fallback_strategy: current_target
+      predictor.include_observed_metrics: true
+      predictor.observed_metric_columns: [current_target, test_acc, train_acc, test_loss, train_loss]
+      features.metric_families: [distribution]
+
+  - experiment_name: latent_averaged_representations_xgboost
+    predictor:
+      name: forecast_model
+      use_bundle_feature_config: true
+      use_bundle_sequence_config: true
+    overrides:
+      data.source: latent_forecast
+      data.parquet_path: metric-prediction/cache/prepared_datasets/5_cifar10_Resnet18_width_2-256_full_all_metrics_long__prepared_dataset.parquet
+      data.pt_path: metric-prediction/cache/latent_representation_datasets/ds_5_tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_encoded_checkpoints/averaged/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_latent_representations_test.pt
+      data.pt_val_path: metric-prediction/cache/latent_representation_datasets/ds_5_tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_encoded_checkpoints/averaged/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_latent_representations_val.pt
+      predictor.model_bundle_path: metric-prediction/outputs/forecasting/latent_averaged/horizon/xgboost/ds5/results/ds5_latent_xgb_horizon_5/artifacts/model_bundle.pkl
+      predictor.used_features_path: metric-prediction/outputs/forecasting/latent_averaged/horizon/xgboost/ds5/results/ds5_latent_xgb_horizon_5/artifacts/used_features.json
+
+  - experiment_name: latent_averaged_representations_xgboost_with_perf
+    predictor:
+      name: forecast_model
+      use_bundle_feature_config: true
+      use_bundle_sequence_config: true
+    overrides:
+      data.source: latent_forecast
+      data.parquet_path: metric-prediction/cache/prepared_datasets/5_cifar10_Resnet18_width_2-256_full_all_metrics_long__prepared_dataset.parquet
+      data.pt_path: metric-prediction/cache/latent_representation_datasets/ds_5_tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_encoded_checkpoints/averaged/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_latent_representations_test.pt
+      data.pt_val_path: metric-prediction/cache/latent_representation_datasets/ds_5_tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_encoded_checkpoints/averaged/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_latent_representations_val.pt
+      predictor.model_bundle_path: metric-prediction/outputs/forecasting/latent_averaged/horizon/xgboost/ds5/results/ds5_latent_xgb_horizon_5_with_perf/artifacts/model_bundle.pkl
+      predictor.used_features_path: metric-prediction/outputs/forecasting/latent_averaged/horizon/xgboost/ds5/results/ds5_latent_xgb_horizon_5_with_perf/artifacts/used_features.json
+
+  - experiment_name: latent_averaged_representations_mlp
+    predictor:
+      name: forecast_model
+      use_bundle_feature_config: true
+      use_bundle_sequence_config: true
+    overrides:
+      data.source: latent_forecast
+      data.parquet_path: metric-prediction/cache/prepared_datasets/5_cifar10_Resnet18_width_2-256_full_all_metrics_long__prepared_dataset.parquet
+      data.pt_path: metric-prediction/cache/latent_representation_datasets/ds_5_tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_encoded_checkpoints/averaged/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_latent_representations_test.pt
+      data.pt_val_path: metric-prediction/cache/latent_representation_datasets/ds_5_tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_encoded_checkpoints/averaged/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_latent_representations_val.pt
+      predictor.model_bundle_path: metric-prediction/outputs/forecasting/latent_averaged/horizon/mlp/ds5/results/ds5_latent_mlp_horizon_5_arch256_128_64_nolayernorm/artifacts/model_bundle.pt
+      predictor.used_features_path: metric-prediction/outputs/forecasting/latent_averaged/horizon/mlp/ds5/results/ds5_latent_mlp_horizon_5_arch256_128_64_nolayernorm/artifacts/used_features.json
+
+  - experiment_name: latent_averaged_representations_mlp_with_perf
+    predictor:
+      name: forecast_model
+      use_bundle_feature_config: true
+      use_bundle_sequence_config: true
+    overrides:
+      data.source: latent_forecast
+      data.parquet_path: metric-prediction/cache/prepared_datasets/5_cifar10_Resnet18_width_2-256_full_all_metrics_long__prepared_dataset.parquet
+      data.pt_path: metric-prediction/cache/latent_representation_datasets/ds_5_tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_encoded_checkpoints/averaged/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_latent_representations_test.pt
+      data.pt_val_path: metric-prediction/cache/latent_representation_datasets/ds_5_tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_encoded_checkpoints/averaged/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_latent_representations_val.pt
+      predictor.model_bundle_path: metric-prediction/outputs/forecasting/latent_averaged/horizon/mlp/ds5/results/ds5_latent_mlp_horizon_5_arch256_128_64_nolayernorm_with_perf/artifacts/model_bundle.pt
+      predictor.used_features_path: metric-prediction/outputs/forecasting/latent_averaged/horizon/mlp/ds5/results/ds5_latent_mlp_horizon_5_arch256_128_64_nolayernorm_with_perf/artifacts/used_features.json
+
+  - experiment_name: latent_window_representations_lstm
+    predictor:
+      name: forecast_model
+      use_bundle_feature_config: true
+      use_bundle_sequence_config: true
+    overrides:
+      data.source: latent_forecast
+      data.parquet_path: metric-prediction/cache/prepared_datasets/5_cifar10_Resnet18_width_2-256_full_all_metrics_long__prepared_dataset.parquet
+      data.pt_path: /netscratch1/rstaedeli/local/latent_exports/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_encoded_checkpoints/windows/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_latent_representations_test_windows.pt
+      data.pt_val_path: /netscratch1/rstaedeli/local/latent_exports/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_encoded_checkpoints/windows/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_latent_representations_val_windows.pt
+      predictor.model_bundle_path: metric-prediction/outputs/forecasting/latent_windows/horizon/lstm/ds5/results/ds5_latent_windows_lstm_horizon_5_small/artifacts/model_bundle.pt
+      predictor.used_features_path: metric-prediction/outputs/forecasting/latent_windows/horizon/lstm/ds5/results/ds5_latent_windows_lstm_horizon_5_small/artifacts/used_features.json
+
+  - experiment_name: latent_window_representations_lstm_with_perf
+    predictor:
+      name: forecast_model
+      use_bundle_feature_config: true
+      use_bundle_sequence_config: true
+    overrides:
+      data.source: latent_forecast
+      data.parquet_path: metric-prediction/cache/prepared_datasets/5_cifar10_Resnet18_width_2-256_full_all_metrics_long__prepared_dataset.parquet
+      data.pt_path: /netscratch1/rstaedeli/local/latent_exports/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_encoded_checkpoints/windows/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_latent_representations_test_windows.pt
+      data.pt_val_path: /netscratch1/rstaedeli/local/latent_exports/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_encoded_checkpoints/windows/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_latent_representations_val_windows.pt
+      predictor.model_bundle_path: metric-prediction/outputs/forecasting/latent_windows/horizon/lstm/ds5/results/ds5_latent_windows_lstm_horizon_5_small_with_perf/artifacts/model_bundle.pt
+      predictor.used_features_path: metric-prediction/outputs/forecasting/latent_windows/horizon/lstm/ds5/results/ds5_latent_windows_lstm_horizon_5_small_with_perf/artifacts/used_features.json
+
+  - experiment_name: latent_window_representations_online_lstm
+    predictor:
+      name: online_lstm
+    overrides:
+      data.source: latent_forecast
+      data.parquet_path: metric-prediction/cache/prepared_datasets/5_cifar10_Resnet18_width_2-256_full_all_metrics_long__prepared_dataset.parquet
+      data.pt_path: /netscratch1/rstaedeli/local/latent_exports/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_encoded_checkpoints/windows/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_latent_representations_test_windows.pt
+      data.pt_val_path: /netscratch1/rstaedeli/local/latent_exports/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_encoded_checkpoints/windows/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_latent_representations_val_windows.pt      
+      sequence.min_history: 4
+      predictor.min_train_rows: 10
+      predictor.min_train_models: 2
+      predictor.fallback_strategy: current_target
+      predictor.include_observed_metrics: true
+      predictor.observed_metric_columns: []
+      predictor.params.hidden_size: 64
+      predictor.params.num_layers: 1
+      predictor.params.bidirectional: false
+      predictor.params.dropout: 0.0
+      predictor.params.head_hidden_layer_sizes: [32]
+      predictor.params.batch_size: 16
+      predictor.params.learning_rate: 0.001
+      predictor.params.weight_decay: 0.001
+      predictor.params.max_epochs: 50
+      predictor.params.patience: 10
+      predictor.params.scheduler_patience: 5
+
+  - experiment_name: latent_window_representations_online_lstm_with_perf
+    predictor:
+      name: online_lstm
+    overrides:
+      data.source: latent_forecast
+      data.parquet_path: metric-prediction/cache/prepared_datasets/5_cifar10_Resnet18_width_2-256_full_all_metrics_long__prepared_dataset.parquet
+      data.pt_path: /netscratch1/rstaedeli/local/latent_exports/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_encoded_checkpoints/windows/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_latent_representations_test_windows.pt
+      data.pt_val_path: /netscratch1/rstaedeli/local/latent_exports/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_encoded_checkpoints/windows/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_latent_representations_val_windows.pt      
+      sequence.min_history: 4
+      predictor.min_train_rows: 10
+      predictor.min_train_models: 2
+      predictor.fallback_strategy: current_target
+      predictor.include_observed_metrics: true
+      predictor.observed_metric_columns: [current_target, test_acc, train_acc, test_loss, train_loss]
+      predictor.params.hidden_size: 64
+      predictor.params.num_layers: 1
+      predictor.params.bidirectional: false
+      predictor.params.dropout: 0.0
+      predictor.params.head_hidden_layer_sizes: [32]
+      predictor.params.batch_size: 16
+      predictor.params.learning_rate: 0.001
+      predictor.params.weight_decay: 0.001
+      predictor.params.max_epochs: 50
+      predictor.params.patience: 10
+      predictor.params.scheduler_patience: 5
+
+  - experiment_name: latent_tokens_representations_transformer
+    predictor:
+      name: forecast_model
+      use_bundle_feature_config: true
+      use_bundle_sequence_config: false
+    overrides:
+      data.source: latent_forecast
+      data.parquet_path: metric-prediction/cache/prepared_datasets/5_cifar10_Resnet18_width_2-256_full_all_metrics_long__prepared_dataset.parquet
+      data.pt_path: /netscratch1/rstaedeli/local/latent_exports/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_encoded_checkpoints/tokens/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_latent_representations_test_tokens_manifest.pt
+      data.pt_val_path: /netscratch1/rstaedeli/local/latent_exports/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_encoded_checkpoints/tokens/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_latent_representations_val_tokens_manifest.pt
+      predictor.model_bundle_path: metric-prediction/outputs/forecasting/latent_tokens/horizon/transformer/ds5/results/ds5_tokens_transformer_hier128_small/artifacts/model_bundle.pt
+      predictor.used_features_path: metric-prediction/outputs/forecasting/latent_tokens/horizon/transformer/ds5/results/ds5_tokens_transformer_hier128_small/artifacts/used_features.json
+      sequence.min_history: 4
+
+  - experiment_name: latent_tokens_representations_transformer_with_perf
+    predictor:
+      name: forecast_model
+      use_bundle_feature_config: true
+      use_bundle_sequence_config: false
+    overrides:
+      data.source: latent_forecast
+      data.parquet_path: metric-prediction/cache/prepared_datasets/5_cifar10_Resnet18_width_2-256_full_all_metrics_long__prepared_dataset.parquet
+      data.pt_path: /netscratch1/rstaedeli/local/latent_exports/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_encoded_checkpoints/tokens/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_latent_representations_test_tokens_manifest.pt
+      data.pt_val_path: /netscratch1/rstaedeli/local/latent_exports/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_encoded_checkpoints/tokens/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_latent_representations_val_tokens_manifest.pt
+      predictor.model_bundle_path: metric-prediction/outputs/forecasting/latent_tokens/horizon/transformer/ds5/results/ds5_tokens_transformer_hier128_small_with_perf/artifacts/model_bundle.pt
+      predictor.used_features_path: metric-prediction/outputs/forecasting/latent_tokens/horizon/transformer/ds5/results/ds5_tokens_transformer_hier128_small_with_perf/artifacts/used_features.json
+      sequence.min_history: 4
+
+  - experiment_name: latent_tokens_representations_online_transformer
+    predictor:
+      name: online_hierarchical_transformer
+    overrides:
+      data.source: latent_forecast
+      data.parquet_path: metric-prediction/cache/prepared_datasets/5_cifar10_Resnet18_width_2-256_full_all_metrics_long__prepared_dataset.parquet
+      data.pt_path: /netscratch1/rstaedeli/local/latent_exports/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_encoded_checkpoints/tokens/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_latent_representations_test_tokens_manifest.pt
+      data.pt_val_path: /netscratch1/rstaedeli/local/latent_exports/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_encoded_checkpoints/tokens/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_latent_representations_val_tokens_manifest.pt
+      sequence.min_history: 4
+      predictor.min_train_rows: 10
+      predictor.min_train_models: 2
+      predictor.fallback_strategy: current_target
+      predictor.include_observed_metrics: true
+      predictor.observed_metric_columns: []
+      predictor.params.d_model: 64
+      predictor.params.nhead: 4
+      predictor.params.num_local_layers: 1
+      predictor.params.num_global_layers: 2
+      predictor.params.local_window_size: 128
+      predictor.params.dim_feedforward: 128
+      predictor.params.dropout: 0.0
+      predictor.params.scale_features: false
+      predictor.params.head_hidden_layer_sizes: [32]
+      predictor.params.use_positional_encoding: true
+      predictor.params.batch_size: 8
+      predictor.params.learning_rate: 0.001
+      predictor.params.weight_decay: 0.001
+      predictor.params.max_epochs: 50
+      predictor.params.patience: 10
+      predictor.params.scheduler_patience: 5
+
+  - experiment_name: latent_tokens_representations_online_transformer_with_perf
+    predictor:
+      name: online_hierarchical_transformer
+    overrides:
+      data.source: latent_forecast
+      data.parquet_path: metric-prediction/cache/prepared_datasets/5_cifar10_Resnet18_width_2-256_full_all_metrics_long__prepared_dataset.parquet
+      data.pt_path: /netscratch1/rstaedeli/local/latent_exports/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_encoded_checkpoints/tokens/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_latent_representations_test_tokens_manifest.pt
+      data.pt_val_path: /netscratch1/rstaedeli/local/latent_exports/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_encoded_checkpoints/tokens/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_latent_representations_val_tokens_manifest.pt
+      sequence.min_history: 4
+      predictor.min_train_rows: 10
+      predictor.min_train_models: 2
+      predictor.fallback_strategy: current_target
+      predictor.include_observed_metrics: true
+      predictor.observed_metric_columns: [current_target, test_acc, train_acc, test_loss, train_loss]
+      predictor.params.d_model: 64
+      predictor.params.nhead: 4
+      predictor.params.num_local_layers: 1
+      predictor.params.num_global_layers: 2
+      predictor.params.local_window_size: 128
+      predictor.params.dim_feedforward: 128
+      predictor.params.dropout: 0.0
+      predictor.params.scale_features: false
+      predictor.params.head_hidden_layer_sizes: [32]
+      predictor.params.use_positional_encoding: true
+      predictor.params.batch_size: 8
+      predictor.params.learning_rate: 0.001
+      predictor.params.weight_decay: 0.001
+      predictor.params.max_epochs: 50
+      predictor.params.patience: 10
+      predictor.params.scheduler_patience: 5

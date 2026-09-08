@@ -1,0 +1,34 @@
+# Training config for forecasting mode.
+# Omits shuffle (epoch order is preserved by design) and SHAP fields.
+# Uses artifacts_root instead of artifacts_dir because the forecasting pipeline
+# resolves the full output path from root + date + experiment_name.
+
+random_seed: 42
+
+# If true, request deterministic PyTorch algorithms and disable cuDNN
+# benchmarking. This can reduce throughput and may raise if an op has no
+# deterministic implementation on the current backend.
+deterministic: true
+
+# If true, disable TF32 matrix math on CUDA to reduce backend-specific numeric
+# drift on Ampere/Hopper GPUs. Has no effect on CPU and MPS.
+disable_tf32: true
+
+# Fraction of models (not rows) held out for validation.
+validation_size: 0.2
+
+# Save the fitted model + preprocessor + sequence config as model_bundle.pt for
+# PyTorch models and model_bundle.pkl for sklearn/XGBoost/LightGBM-style models.
+# Required for sotf-select predictor=forecast_model; horizon must match sequence.horizon.
+save_model: true
+
+# Save per-sample validation predictions to validation_predictions.parquet.
+save_predictions: true
+
+# Save the expanded lag-feature matrix to forecast_feature_matrix.parquet.
+# Can be very large when max_lag is high.
+save_feature_matrix: false
+
+# Root directory for output artefacts when running outside a named batch.
+# Hydra overrides hydra.run.dir, so this only applies when run_dir is unset.
+artifacts_root: metric-prediction/outputs_forecasting

@@ -1,0 +1,37 @@
+# LSTM over per-checkpoint latent window embeddings.
+# Expects data.pt_path or data.pt_train_path/data.pt_val_path files whose
+# embeddings field is a list of [n_windows_i, embedding_dim] tensors.
+
+name: latent_window_lstm
+params:
+  hidden_size: 128
+  num_layers: 1
+  bidirectional: false
+  dropout: 0.0
+
+  # MLP head applied to the final LSTM state, optionally concatenated with
+  # scalar time/current-target features from the sequence config.
+  head_hidden_layer_sizes: [64]
+  activation: gelu
+
+  batch_size: 16
+  learning_rate: 0.001
+  weight_decay: 0.001
+  max_epochs: 500
+  early_stopping: true
+  patience: 40
+
+  validation_fraction: 0.15
+  scheduler_factor: 0.5
+  scheduler_patience: 15
+  min_learning_rate: 0.00001
+  gradient_clip_norm: 1.0
+
+  loss: smooth_l1
+  scale_features: true
+  scale_target: true
+
+  # Options: auto | cpu | cuda | mps
+  device: auto
+
+  random_state: ${train.random_seed}

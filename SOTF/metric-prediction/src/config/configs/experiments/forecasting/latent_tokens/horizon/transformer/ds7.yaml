@@ -1,0 +1,159 @@
+# @package _global_
+# Hierarchical Transformer on ds7 token sequences (horizon-5 forecast).
+#
+# Dataset: ds7 — cifar10_ViT_ADAMW_300eps_width_6-192
+# Input: per-checkpoint raw token sequences  (tokens variant)
+# Target: test_acc  horizon-5 forecast
+#
+# NOTE on sequence lengths:
+#   ViT on CIFAR-10 (32x32, patch_size=4) produces 64 tokens per image.
+#   We sweep local_window_size values so the global sequence length stays
+#   manageable after chunking. We also cap raw token length at max_seq_len=16384.
+#
+#   local_window_size=128  → global ≤ ceil(16384/128) = 128 windows
+#   local_window_size=256  → global ≤ ceil(16384/256) =  64 windows
+#   local_window_size=512  → global ≤ ceil(16384/512) =  32 windows
+
+batch_name: ds7
+output_root: metric-prediction/outputs/forecasting/latent_tokens/horizon/transformer
+batch_root_subdir: null
+evaluation:
+  kind: forecasting
+
+common_overrides:
+  mode: latent_windows_transformer_forecast
+  data.pt_train_path: /netscratch1/rstaedeli/local/latent_exports/tune_zoo_cifar-10_ViT_ADAMW_300eps_width_6-192_bs_512-8_LR_0.006_patch_size_4_epoch_300_encoded_checkpoints/tune_zoo_cifar-10_ViT_ADAMW_300eps_width_6-192_bs_512-8_LR_0.006_patch_size_4_epoch_300_latent_representations_train_tokens_manifest.pt
+  data.pt_val_path: /netscratch1/rstaedeli/local/latent_exports/tune_zoo_cifar-10_ViT_ADAMW_300eps_width_6-192_bs_512-8_LR_0.006_patch_size_4_epoch_300_encoded_checkpoints/tune_zoo_cifar-10_ViT_ADAMW_300eps_width_6-192_bs_512-8_LR_0.006_patch_size_4_epoch_300_latent_representations_val_tokens_manifest.pt
+  ++data.target_parquet_path: metric-prediction/cache/prepared_datasets/7_cifar10_ViT_full_all_metrics_long__prepared_dataset.parquet
+  data.target_column: test_acc
+  data.target_model_min_threshold: 0
+  train.random_seed: 42
+  train.save_predictions: true
+  train.save_feature_matrix: false
+  sequence.add_delta_features: true
+  sequence.include_time_features: true
+  sequence.max_lag: 3
+  sequence.min_history: 4
+  sequence.target_mode: horizon_value
+  sequence.horizon: 5
+  model: hierarchical_transformer
+  model.params.scale_features: false
+
+runs:
+
+  - experiment_name: ds7_tokens_transformer_hier128_small
+    overrides:
+      data.target_parquet_path: metric-prediction/cache/prepared_datasets/7_cifar10_ViT_full_all_metrics_long__prepared_dataset.parquet
+      model.params.local_window_size: 128
+      model.params.d_model: 64
+      model.params.nhead: 4
+      model.params.num_local_layers: 1
+      model.params.num_global_layers: 2
+      model.params.dim_feedforward: 128
+      model.params.dropout: 0.0
+      model.params.head_hidden_layer_sizes: [32]
+      model.params.use_positional_encoding: true
+      model.params.batch_size: 8
+      model.params.learning_rate: 0.001
+      model.params.weight_decay: 0.001
+      model.params.max_epochs: 200
+      model.params.patience: 20
+      model.params.scheduler_patience: 8
+
+  - experiment_name: ds7_tokens_transformer_hier256_small
+    overrides:
+      data.target_parquet_path: metric-prediction/cache/prepared_datasets/7_cifar10_ViT_full_all_metrics_long__prepared_dataset.parquet
+      model.params.local_window_size: 256
+      model.params.d_model: 64
+      model.params.nhead: 4
+      model.params.num_local_layers: 1
+      model.params.num_global_layers: 2
+      model.params.dim_feedforward: 128
+      model.params.dropout: 0.0
+      model.params.head_hidden_layer_sizes: [32]
+      model.params.use_positional_encoding: true
+      model.params.batch_size: 8
+      model.params.learning_rate: 0.001
+      model.params.weight_decay: 0.001
+      model.params.max_epochs: 200
+      model.params.patience: 20
+      model.params.scheduler_patience: 8
+
+  - experiment_name: ds7_tokens_transformer_hier512_small
+    overrides:
+      data.target_parquet_path: metric-prediction/cache/prepared_datasets/7_cifar10_ViT_full_all_metrics_long__prepared_dataset.parquet
+      model.params.local_window_size: 512
+      model.params.d_model: 64
+      model.params.nhead: 4
+      model.params.num_local_layers: 1
+      model.params.num_global_layers: 2
+      model.params.dim_feedforward: 128
+      model.params.dropout: 0.0
+      model.params.head_hidden_layer_sizes: [32]
+      model.params.use_positional_encoding: true
+      model.params.batch_size: 8
+      model.params.learning_rate: 0.001
+      model.params.weight_decay: 0.001
+      model.params.max_epochs: 200
+      model.params.patience: 20
+      model.params.scheduler_patience: 8
+
+  - experiment_name: ds7_tokens_transformer_hier128_small_with_perf
+    overrides:
+      data.target_parquet_path: metric-prediction/cache/prepared_datasets/7_cifar10_ViT_full_all_metrics_long__prepared_dataset.parquet
+      model.params.local_window_size: 128
+      model.params.d_model: 64
+      model.params.nhead: 4
+      model.params.num_local_layers: 1
+      model.params.num_global_layers: 2
+      model.params.dim_feedforward: 128
+      model.params.dropout: 0.0
+      model.params.head_hidden_layer_sizes: [32]
+      model.params.use_positional_encoding: true
+      model.params.batch_size: 8
+      model.params.learning_rate: 0.001
+      model.params.weight_decay: 0.001
+      model.params.max_epochs: 200
+      model.params.patience: 20
+      model.params.scheduler_patience: 8
+      sequence.observed_metric_columns: [test_acc, train_acc, test_loss, train_loss]
+
+  - experiment_name: ds7_tokens_transformer_hier256_small_with_perf
+    overrides:
+      data.target_parquet_path: metric-prediction/cache/prepared_datasets/7_cifar10_ViT_full_all_metrics_long__prepared_dataset.parquet
+      model.params.local_window_size: 256
+      model.params.d_model: 64
+      model.params.nhead: 4
+      model.params.num_local_layers: 1
+      model.params.num_global_layers: 2
+      model.params.dim_feedforward: 128
+      model.params.dropout: 0.0
+      model.params.head_hidden_layer_sizes: [32]
+      model.params.use_positional_encoding: true
+      model.params.batch_size: 8
+      model.params.learning_rate: 0.001
+      model.params.weight_decay: 0.001
+      model.params.max_epochs: 200
+      model.params.patience: 20
+      model.params.scheduler_patience: 8
+      sequence.observed_metric_columns: [test_acc, train_acc, test_loss, train_loss]
+
+  - experiment_name: ds7_tokens_transformer_hier512_small_with_perf
+    overrides:
+      data.target_parquet_path: metric-prediction/cache/prepared_datasets/7_cifar10_ViT_full_all_metrics_long__prepared_dataset.parquet
+      model.params.local_window_size: 512
+      model.params.d_model: 64
+      model.params.nhead: 4
+      model.params.num_local_layers: 1
+      model.params.num_global_layers: 2
+      model.params.dim_feedforward: 128
+      model.params.dropout: 0.0
+      model.params.head_hidden_layer_sizes: [32]
+      model.params.use_positional_encoding: true
+      model.params.batch_size: 8
+      model.params.learning_rate: 0.001
+      model.params.weight_decay: 0.001
+      model.params.max_epochs: 200
+      model.params.patience: 20
+      model.params.scheduler_patience: 8
+      sequence.observed_metric_columns: [test_acc, train_acc, test_loss, train_loss]

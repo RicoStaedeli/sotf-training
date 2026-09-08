@@ -1,0 +1,5 @@
+tokenizer_class: sparse          # The tokenizer class. Either "dense" or "sparse"
+tokensize: 230                 # Target token size for input sequences
+device: "cpu"
+mode: "full_model"              # The tokenization mode. Either "layer_wise" or "full_model"
+padding: "zero"                 # Padding strategy: "zero", "mean", "gaussian", "reflect", "replicate", "circular"

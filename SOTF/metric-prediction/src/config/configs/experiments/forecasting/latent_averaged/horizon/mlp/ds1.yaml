@@ -1,0 +1,84 @@
+# @package _global_
+
+hydra:
+  job:
+    chdir: false
+dry_run: false
+
+batch_name: ds1
+output_root: metric-prediction/outputs/forecasting/latent_averaged/horizon/mlp
+batch_root_subdir: null
+evaluation:
+  kind: forecasting
+common_overrides:
+  mode: latent_forecast
+  data.pt_train_path: metric-prediction/cache/latent_representation_datasets/ds_1_tune_zoo_cifar10_uniform_large_encoded_checkpoints/averaged/tune_zoo_cifar10_uniform_large_latent_representations_train.pt
+  data.pt_val_path: metric-prediction/cache/latent_representation_datasets/ds_1_tune_zoo_cifar10_uniform_large_encoded_checkpoints/averaged/tune_zoo_cifar10_uniform_large_latent_representations_val.pt
+  ++data.target_parquet_path: metric-prediction/cache/prepared_datasets/1_cifar10_uniform_large_full_all_metrics_long__prepared_dataset.parquet
+  data.target_column: test_acc
+  data.target_model_min_threshold: 0
+  train.random_seed: 42
+  train.save_predictions: true
+  train.save_feature_matrix: false
+  sequence.add_delta_features: true
+  sequence.include_time_features: true
+  sequence.max_lag: 3
+  sequence.min_history: 4
+  sequence.target_mode: horizon_value
+  sequence.horizon: 5
+  model: mlp_latent
+
+runs:
+
+  - experiment_name: ds1_latent_mlp_horizon_5_arch64_32
+    overrides:
+      model.params.hidden_layer_sizes: [64, 32]
+      model.params.dropout: 0.0
+      model.params.weight_decay: 0.001
+      model.params.max_epochs: 500
+      model.params.patience: 40
+
+  - experiment_name: ds1_latent_mlp_horizon_5_arch128_64_drop10
+    overrides:
+      model.params.hidden_layer_sizes: [128, 64]
+      model.params.dropout: 0.1
+      model.params.weight_decay: 0.001
+      model.params.max_epochs: 500
+      model.params.patience: 40
+
+  - experiment_name: ds1_latent_mlp_horizon_5_arch256_128_64_nolayernorm
+    overrides:
+      model.params.hidden_layer_sizes: [256, 128, 64]
+      model.params.use_layer_norm: false
+      model.params.dropout: 0.0
+      model.params.weight_decay: 0.001
+      model.params.max_epochs: 500
+      model.params.patience: 40
+
+  - experiment_name: ds1_latent_mlp_horizon_5_arch64_32_with_perf
+    overrides:
+      model.params.hidden_layer_sizes: [64, 32]
+      model.params.dropout: 0.0
+      model.params.weight_decay: 0.001
+      model.params.max_epochs: 500
+      model.params.patience: 40
+      sequence.observed_metric_columns: [test_acc, train_acc, test_loss, train_loss]
+
+  - experiment_name: ds1_latent_mlp_horizon_5_arch128_64_drop10_with_perf
+    overrides:
+      model.params.hidden_layer_sizes: [128, 64]
+      model.params.dropout: 0.1
+      model.params.weight_decay: 0.001
+      model.params.max_epochs: 500
+      model.params.patience: 40
+      sequence.observed_metric_columns: [test_acc, train_acc, test_loss, train_loss]
+
+  - experiment_name: ds1_latent_mlp_horizon_5_arch256_128_64_nolayernorm_with_perf
+    overrides:
+      model.params.hidden_layer_sizes: [256, 128, 64]
+      model.params.use_layer_norm: false
+      model.params.dropout: 0.0
+      model.params.weight_decay: 0.001
+      model.params.max_epochs: 500
+      model.params.patience: 40
+      sequence.observed_metric_columns: [test_acc, train_acc, test_loss, train_loss]

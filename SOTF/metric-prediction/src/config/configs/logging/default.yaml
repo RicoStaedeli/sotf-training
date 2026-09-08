@@ -1,0 +1,11 @@
+# Logging config shared across all modes.
+
+# Logging verbosity level.
+# Options: DEBUG | INFO | WARNING | ERROR | CRITICAL
+level: INFO
+
+# Write log output to a file inside the Hydra output directory.
+save_to_file: true
+
+# Log file name. Uses the OmegaConf path_safe resolver to sanitise the experiment name.
+filename: ${path_safe:${experiment_name}}.log

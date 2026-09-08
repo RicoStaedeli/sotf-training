@@ -1,0 +1,14 @@
+source: prepared_dataset
+parquet_path: null
+target_column: test_acc
+metadata_columns: [model_id, path, epoch, hyperparameter_key]
+epoch_filter: []
+target_model_min_threshold: null
+pt_path: null
+pt_train_path: null
+pt_val_path: null
+target_parquet_path: null
+model_ids_from_pt_path: null
+model_ids_from_pt_val_path: null
+id_normalize_basename: true
+epoch_from_checkpoint_path: false

@@ -1,0 +1,52 @@
+datasets:
+#  - 1_cifar10_uniform_large
+#  - 2_cifar10_large_hyp_random_seeds
+#  - 3_cifar10_large_hyp_fixed_seeds
+#  - 4_cifar10_resnet18_kaiming
+#  - 5_cifar10_Resnet18_width_2-256
+#  - 6_cifar10_Resnet50_width_2-256
+#  - 7_cifar10_ViT
+#  - 8_stl10_uniform_large
+#  - 9_stl10_large_hyp_random_seeds
+#  - 10_stl10_large_hyp_fixed_seeds
+#  - 11_tinyimagenet_resnet18_kaiming
+#  - 12_phase_resnet18_tinyimagenet
+#  - 13_phase_resnet50_tinyimagenet
+  - 14_phase_resnet18_tinyimagenet_width_4-256
+
+epoch_col: training_iteration
+model_col: model_name
+
+metric_aliases:
+  validation_acc: [validation_acc, val_acc]
+  validation_loss: [validation_loss, val_loss]
+
+analyses:
+  - name: weight_analysis
+    cache_dir: "learning-dynamics/outputs/cache/weight_metrics"
+    metric_family: "all"
+    metric: "all"
+    scope: "all"
+    cache_only: True  # Whether only calculate the ws dataset
+    weight_only: False
+    compute_full_model_theta: True
+    epoch_col: "epoch"
+    epoch_range: []
+    png_dpi: 200
+    dataset_split: "full"
+    force_recompute: True
+    force_recompute_plot_tables: False
+    skip_missing_cache: False
+    groupby_cols: []
+    include_quantiles: True
+    max_all_layer_lines: 150
+    all_layer_legend_threshold: 30
+    include_single_metric_plot: True
+    include_all_layer_plot: True
+    include_heatmap: True
+    weight_compute_num_workers: 4
+
+output_pdf_dir: learning-dynamics/outputs/reports/PDF/
+output_png_dir: learning-dynamics/outputs/reports/PNG/
+output_tables_dir: learning-dynamics/outputs/reports/tables/
+cache_dir: learning-dynamics/outputs/cache/

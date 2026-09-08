@@ -1,0 +1,15 @@
+split:
+  train: 0.7
+  val: 0.15
+  test: 0.15                  # Proportions for train/validation/test splits
+splitter: "RandomSplitter"                 # Strategy for splitting the dataset
+batch_size: 128                            # Batch size
+num_workers: 16                             # Number of worker processes for data loading
+drop_last: False                           # Whether to drop the last incomplete batch
+prefetch_factor: 4
+pin_memory: True  
+defaults:
+  - _self_
+  - checkpoints_dataset: cifar10_cnn_large_random_seed
+  - tokenizer: sparse_full_model
+  - tokens_dataset: per_window_cache

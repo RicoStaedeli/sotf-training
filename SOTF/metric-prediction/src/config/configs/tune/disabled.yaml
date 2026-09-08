@@ -1,0 +1,29 @@
+# Ray Tune config — disabled (no hyperparameter search).
+# Switch to tune=xgboost | tune=lightgbm | tune=ridge to activate.
+
+enabled: false
+
+# Internal Ray Tune experiment label (only used when enabled=true).
+experiment_name: ray_tune
+
+# Number of hyperparameter configurations to sample and evaluate.
+num_samples: 1
+
+# Metric used to rank trials and select the best configuration.
+# Options: rmse | mae | r2
+metric: rmse
+
+# Optimisation direction for the metric.
+# Options: min | max
+mode: min
+
+# Maximum number of trials running in parallel. null = Ray default (n_cpus / resources_per_trial.cpu).
+max_concurrent_trials: null
+
+# Compute resources allocated to each trial.
+resources_per_trial:
+  cpu: 1
+  gpu: 0
+
+# Hyperparameter search space. Empty when disabled; populated in tune/*.yaml variants.
+search_space: {}

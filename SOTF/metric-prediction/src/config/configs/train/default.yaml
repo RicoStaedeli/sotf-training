@@ -1,0 +1,47 @@
+# Training config for prediction and latent modes.
+
+# Random seed for train/validation split and model initialisation.
+random_seed: 42
+
+# If true, request deterministic PyTorch algorithms and disable cuDNN
+# benchmarking. This can reduce throughput and may raise if an op has no
+# deterministic implementation on the current backend.
+deterministic: true
+
+# If true, disable TF32 matrix math on CUDA to reduce backend-specific numeric
+# drift on Ampere/Hopper GPUs. Has no effect on CPU and MPS.
+disable_tf32: true
+
+# Fraction of data held out for validation.
+# Range: 0.05 – 0.4
+validation_size: 0.2
+
+# Shuffle rows before splitting into train/validation.
+# Set to false for time-ordered datasets (use forecasting mode instead).
+shuffle: true
+
+# Subdirectory inside the Hydra run directory where all output files are written.
+artifacts_dir: artifacts
+
+# Save the fitted model + preprocessor as model_bundle.pt for PyTorch models
+# and model_bundle.pkl for sklearn/XGBoost/LightGBM-style models.
+# Required if the bundle will be consumed by sotf-select predictor=forecast_model.
+save_model: true
+
+# Save per-sample validation predictions to validation_predictions.parquet.
+save_predictions: true
+
+# Save the full feature matrix (features + target) to feature_matrix.parquet.
+# Useful for post-hoc analysis but can be large.
+save_feature_matrix: false
+
+# Compute and save SHAP feature-importance plots and parquet.
+# Disable to speed up runs when interpretability is not needed.
+save_shap_artifacts: true
+
+# Maximum number of validation samples used for SHAP computation.
+# Smaller values are faster; SHAP is O(samples × features) for tree models.
+shap_max_samples: 1000
+
+# Number of top features shown in the SHAP summary plot.
+shap_max_display: 20

@@ -1,0 +1,37 @@
+# Data config for prediction mode.
+# Supports either:
+# 1. one prepared wide-form parquet produced by generate_prepared_dataset.py, or
+# 2. a pre-split pair of weight-statistic PT files produced by
+#    create_weight_statistic_split_pt.py.
+
+# Single-file mode: path to the prepared wide-form parquet file.
+# Set parquet_path OR the pt_train_path / pt_val_path pair.
+parquet_path: null
+
+# Pre-split mode: separate PT files for training and validation.
+# Use this when you want the exact same split as the latent representation dataset.
+pt_train_path: null
+pt_val_path: null
+
+# Directory for caching preprocessed dataset variants between runs.
+cache_dir: metric-prediction/cache/prepared_datasets
+
+# Column used as the regression target.
+# Common options: test_acc | train_acc | test_loss | train_loss
+target_column: test_acc
+
+# Columns treated as metadata (not features). Kept for traceability in output files.
+metadata_columns: [model_id, path, epoch, hyperparameter_key]
+
+# Restrict training to a specific subset of epochs.
+# Empty list = use all epochs. Example: [10, 20, 30]
+epoch_filter: []
+
+# Drop models whose maximum target value is below this threshold.
+# Useful to filter out clearly failed runs. null = no filtering.
+target_model_min_threshold: null
+
+# Optional CSV with columns model_id, split_name. When set, train/val rows are
+# selected from this file instead of generating a random grouped split.
+# Rows marked test are excluded from train/validation experiments.
+split_csv_path: null

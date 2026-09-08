@@ -1,0 +1,140 @@
+# Cross-dataset SOTF evaluation — all datasets in one comparison.
+#
+# Usage:
+#   python sotf-selection/evaluate_config.py horizon_value/all.yaml
+#   python sotf-selection/evaluate_config.py -cn horizon_value/all
+#
+# For each (experiment, survival_rate, start_epoch_category) combination, the two
+# plots below count how many datasets that predictor outperformed the naive baseline.
+# The goal: find a predictor setting that beats the baseline on ALL (or most) datasets.
+#
+# start_epoch_map:  maps the concrete start_epoch used in that dataset's batch sweep to
+#                   one of three abstract categories — early / mid / end — so that results
+#                   from datasets with different training lengths are comparable.
+
+datasets:
+  - name: ds1
+    batches_dir: sotf-selection/outputs/batch_experiments/horizon_value/ds1
+    extra_batches_dirs:
+      - sotf-selection/outputs/batch_experiments/horizon_value/lc_baselines_ds1
+    start_epoch_map:
+      5: early
+      10: mid
+      25: end
+
+  - name: ds2
+    batches_dir: sotf-selection/outputs/batch_experiments/horizon_value/ds2
+    extra_batches_dirs:
+      - sotf-selection/outputs/batch_experiments/horizon_value/lc_baselines_ds2
+    start_epoch_map:
+      5: early
+      10: mid
+      25: end
+
+  - name: ds3
+    batches_dir: sotf-selection/outputs/batch_experiments/horizon_value/ds3
+    extra_batches_dirs:
+      - sotf-selection/outputs/batch_experiments/horizon_value/lc_baselines_ds3
+    start_epoch_map:
+      5: early
+      10: mid
+      25: end
+
+  - name: ds5
+    batches_dir: sotf-selection/outputs/batch_experiments/horizon_value/ds5
+    extra_batches_dirs:
+      - sotf-selection/outputs/batch_experiments/horizon_value/lc_baselines_ds5
+    start_epoch_map:
+      20: early
+      40: mid
+      60: end
+
+  - name: ds7
+    batches_dir: sotf-selection/outputs/batch_experiments/horizon_value/ds7
+    extra_batches_dirs:
+      - sotf-selection/outputs/batch_experiments/horizon_value/lc_baselines_ds7
+    start_epoch_map:
+      20: early
+      40: mid
+      60: end
+
+  - name: ds8
+    batches_dir: sotf-selection/outputs/batch_experiments/horizon_value/ds8
+    extra_batches_dirs:
+      - sotf-selection/outputs/batch_experiments/horizon_value/lc_baselines_ds8
+    start_epoch_map:
+      5: early
+      10: mid
+      25: end
+
+  - name: ds9
+    batches_dir: sotf-selection/outputs/batch_experiments/horizon_value/ds9
+    extra_batches_dirs:
+      - sotf-selection/outputs/batch_experiments/horizon_value/lc_baselines_ds9
+    start_epoch_map:
+      5: early
+      10: mid
+      25: end
+
+  - name: ds10
+    batches_dir: sotf-selection/outputs/batch_experiments/horizon_value/ds10
+    extra_batches_dirs:
+      - sotf-selection/outputs/batch_experiments/horizon_value/lc_baselines_ds10
+    start_epoch_map:
+      5: early
+      10: mid
+      25: end
+
+  - name: ds14
+    batches_dir: sotf-selection/outputs/batch_experiments/horizon_value/ds14
+    extra_batches_dirs:
+      - sotf-selection/outputs/batch_experiments/horizon_value/lc_baselines_ds14
+    start_epoch_map:
+      20: early
+      30: mid
+      40: end
+
+# Filters applied when loading runs from every dataset.
+filters:
+  target_column: test_acc
+  predictor: null     # null = all predictors
+  target_mode: null
+  horizon: null
+  interval: null
+  survival_rate: null
+
+# Metric used to decide "outperformance" relative to the naive baseline.
+#   best_survivor_regret     — lower is better (default)
+#   oracle_top_k_recall      — higher is better
+win_metric: oracle_top_k_recall #best_survivor_regret
+
+# Optional override for the output directory.
+output_dir: null
+
+plots:
+  # Per-experiment heatmap: y = survival_rate, x = early/mid/end, value = # datasets won.
+  cross_dataset_win_heatmap:
+    enabled: true
+
+  # Overview win-rate matrix: y = experiment, x = (category × survival rate), colour = win fraction.
+  cross_dataset_win_matrix:
+    enabled: true
+
+  # Per-experiment grouped bars: x = dataset, bars = start/mid/end, lanes = survival rates.
+  cross_dataset_best_survivor_gap_bars:
+    enabled: true
+
+  # Compact thesis view: rows = settings, columns = datasets, colour = GAP improvement vs naive.
+  cross_dataset_gap_dominance_matrix:
+    enabled: true
+    top_n: 28
+
+  # Most compact robustness ranking: can any setting win on every dataset?
+  cross_dataset_gap_robustness_scorecard:
+    enabled: true
+    top_n: 34
+
+  # Sensitivity overview: rows = feature combinations, columns = start category × survival rate.
+  cross_dataset_gap_parameter_map:
+    enabled: true
+    top_n: 18

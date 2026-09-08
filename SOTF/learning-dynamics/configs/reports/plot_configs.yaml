@@ -1,0 +1,318 @@
+datasets:
+  - 1_cifar10_uniform_large
+  - 2_cifar10_large_hyp_random_seeds
+  - 3_cifar10_large_hyp_fixed_seeds
+  # - 4_cifar10_resnet18_kaiming
+  - 8_stl10_uniform_large
+  - 9_stl10_large_hyp_random_seeds
+  - 10_stl10_large_hyp_fixed_seeds
+  # - 11_tinyimagenet_resnet18_kaiming
+  # - 12_phase_resnet18_tinyimagenet
+  # - 13_phase_resnet50_tinyimagenet  
+  - 5_cifar10_Resnet18_width_2-256
+  # - 6_cifar10_Resnet50_width_2-256
+  - 14_phase_resnet18_tinyimagenet_width_4-256
+  - 7_cifar10_ViT
+  
+epoch_col: training_iteration
+model_col: model_name
+
+metric_aliases:
+  validation_acc: [validation_acc, val_acc]
+  validation_loss: [validation_loss, val_loss]
+
+analyses:
+  # - name: acc_curves
+  #   metric: train_acc
+  #   epoch_range: []
+  #   png_dpi: 200
+  #   avg_curves: false
+  #   boxplot_curves: true
+  #   boxplot_overview:
+  #     enabled: true
+  #     single_page:
+  #       enabled: true
+  #       ncols: 2
+  #     paged:
+  #       enabled: true
+  #       nrows: 2
+  #       ncols: 2
+
+  - name: acc_curves
+    metric: test_acc
+    epoch_range: []
+    png_dpi: 200
+    avg_curves: false
+    overlay_models_max: 5
+    overlay_models_legend: true
+    boxplot_curves: true
+    boxplot_overview:
+      enabled: true
+      single_page:
+        enabled: true
+        ncols: 3
+      paged:
+        enabled: false
+        nrows: 2
+        ncols: 2
+
+  # - name: ranking_flips
+  #   metrics:
+  #     - name: train_loss
+  #       higher_is_better: false
+  #     # - name: validation_loss
+  #     #   higher_is_better: false
+  #     - name: test_loss
+  #       higher_is_better: false
+  #     - name: train_acc
+  #       higher_is_better: true
+  #     # - name: validation_acc
+  #     #   higher_is_better: true
+  #     - name: test_acc
+  #       higher_is_better: true
+  #   epoch_range: []
+  #   smoothening_threshold: 0.02
+  #   mode: one_page_per_dataset   # or overlay_by_dataset (optional, see below)
+  #   panel:
+  #     nrows: 2
+  #     ncols: 2
+  #     figsize: [ 12, 7 ]
+
+#   # - name: clustering
+#   #   tag: valacc_k5
+#   #   metric: validation_acc
+#   #   epoch_range: []
+#   #   k: 5
+
+#   # - name: clustering
+#   #   tag: valacc_k0
+#   #   metric: validation_acc
+#   #   epoch_range: []
+#   #   k: 0
+
+#   - name: clustering
+#     tag: testacc_k0
+#     metric: test_acc
+#     epoch_range: []
+#     k: 0
+
+#   - name: clustering
+#     tag: testacc_k5
+#     metric: test_acc
+#     epoch_range: []
+#     k: 5
+
+
+  # - name: late_bloomers
+  #   metrics:
+  #     # - name: train_loss
+  #     #   higher_is_better: false
+  #     # - name: validation_loss
+  #     #   higher_is_better: false
+  #     # - name: test_loss
+  #     #   higher_is_better: false
+  #     # - name: train_acc
+  #     #   higher_is_better: true
+  #     # - name: validation_acc
+  #     #   higher_is_better: true
+  #     - name: test_acc
+  #       higher_is_better: true
+  #   epoch_mid: 0.2
+  #   bottom_frac_mid: 0.3
+  #   top_frac_end: 0.3
+  #   epoch_range: []
+  #   plot_summary_table: true
+  #   summary_columns: [ dataset_name, metric, n_models, late_bloomers, early_faders ]
+  #   summary_max_rows: 80
+  #   png_dpi: 200
+
+  # - name: delta_to_best
+  #   metric: test_acc
+  #   higher_is_better: true
+  #   epoch_range: []
+  #   window_k: 5                 # How many epochs at start and end to use to build mean values
+  #   use_mad: true               # whether to integrate mad or not.
+  #   plot:
+  #     enabled: true
+  #     selection_mode: rank_bands # rank_bands | top_n
+  #     best_n: 3
+  #     middle_n: 3
+  #     worst_n: 3
+  #     top_n: 9                  # used only when selection_mode=top_n
+  #     ncols: 3
+  #     figsize: [ 12, 9 ]
+  #     dpi: 200
+  #     use_log: false
+
+#   - name: hyper_analysis
+#     metric: test_acc
+#     higher_is_better: true
+#     epoch_range: [ ]     # optional; otherwise uses max epoch per model in dataset
+#     png_dpi: 200
+#     top_n_table: 30
+#     rf_n_jobs: 2
+#     perm_n_jobs: 2
+#     cv_splits: 3
+#     perm_repeats: 5
+#     rf_n_estimators: 200
+
+# #  - name: weight_analysis
+# #    cache_dir: "learning-dynamics/outputs/cache/weight_metrics"
+# #    metric_family: "all"
+# #    metric: "all"
+# #    scope: "all"
+# #    cache_only: False  # Whether only calculate the ws dataset
+# #    weight_only: False
+# #    compute_full_model_theta: True
+# #    epoch_col: "epoch"
+# #    epoch_range: []
+# #    png_dpi: 200
+# #    dataset_split: "full"
+# #    force_recompute: False
+# #    force_recompute_plot_tables: False
+# #    skip_missing_cache: False
+# #    groupby_cols: []
+# #    include_quantiles: True
+# #    max_all_layer_lines: 150
+# #    all_layer_legend_threshold: 30
+# #    include_single_metric_plot: True
+# #    include_all_layer_plot: True
+# #    include_heatmap: True
+# #    weight_compute_num_workers: 4
+
+#   # - name: weight_rank_correspondence
+#   #   cache_dir: "learning-dynamics/outputs/cache/weight_metrics"
+#   #   dataset_split: "full"
+#   #   force_recompute: False
+#   #   skip_missing_cache: True
+#   #   drop_epoch_zero: True
+#   #   rank_metric: "test_acc"
+#   #   higher_is_better: True
+#   #   metric_family: "all"
+#   #   metric: "all"
+#   #   scope: "all"
+#   #   include_model_row: True
+#   #   top_k_metrics: 15
+#   #   detailed_top_k: 5
+#   #   crossover_quantile: 0.9
+#   #   min_changed_rank: 5
+#   #   min_event_separation: 2
+#   #   align_window: 4
+#   #   pre_window: 2
+#   #   post_window: 2
+#   #   max_lag: 8
+
+# #  - name: weight_rank_correspondence
+# #    cache_dir: "learning-dynamics/outputs/cache/weight_metrics"
+# #    dataset_split: "full"
+# #    force_recompute: False
+# #    skip_missing_cache: True
+# #    drop_epoch_zero: True
+# #    rank_metric: "train_acc"
+# #    higher_is_better: True
+# #    metric_family: "all"
+# #    metric: "all"
+# #    scope: "all"
+# #    include_model_row: True
+# #    top_k_metrics: 15
+# #    detailed_top_k: 5
+# #    crossover_quantile: 0.9
+# #    min_changed_rank: 5
+# #    min_event_separation: 2
+# #    align_window: 4
+# #    pre_window: 2
+# #    post_window: 2
+# #    max_lag: 8
+
+# #  - name: weight_rank_correspondence
+# #    cache_dir: "learning-dynamics/outputs/cache/weight_metrics"
+# #    dataset_split: "full"
+# #    force_recompute: False
+# #    skip_missing_cache: True
+# #    drop_epoch_zero: True
+# #    rank_metric: "test_loss"
+# #    higher_is_better: True
+# #    metric_family: "all"
+# #    metric: "all"
+# #    scope: "all"
+# #    include_model_row: True
+# #    top_k_metrics: 15
+# #    detailed_top_k: 5
+# #    crossover_quantile: 0.9
+# #    min_changed_rank: 5
+# #    min_event_separation: 2
+# #    align_window: 4
+# #    pre_window: 2
+# #    post_window: 2
+# #    max_lag: 8
+
+#   # - name: weight_early_signal
+#   #   functional_metric: test_acc
+#   #   higher_is_better: true
+#   #   use_partitioned_cache: true
+#   #   partition_batch_size: 250000
+#   #   epoch_mid: 15
+#   #   bottom_frac_mid: 0.30
+#   #   top_frac_end: 0.30
+#   #   prediction_epochs: [ ]   # optional; auto-selects <= epoch_mid when empty
+#   #   metric_family: all
+#   #   metric: all
+#   #   scope: all
+#   #   include_model_row: true
+#   #   top_quantile: 0.20
+#   #   plot:
+#   #     enabled: true
+#   #     top_k_metrics: 10
+#   #     include_auc_detail: true
+#   #     auc_detail_top_k: 1
+#   #     include_mannwhitney_detail: true
+#   #     mannwhitney_detail_top_k: 1
+
+# #  - name: weight_early_signal
+# #    functional_metric: train_acc
+# #    higher_is_better: true
+# #    use_partitioned_cache: true
+# #    partition_batch_size: 250000
+# #    epoch_mid: 15
+# #    bottom_frac_mid: 0.30
+# #    top_frac_end: 0.30
+# #    prediction_epochs: [ ]   # optional; auto-selects <= epoch_mid when empty
+# #    metric_family: all
+# #    metric: all
+# #    scope: all
+# #    include_model_row: true
+# #    top_quantile: 0.20
+# #    plot:
+# #      enabled: true
+# #      top_k_metrics: 10
+# #      include_auc_detail: true
+# #      auc_detail_top_k: 1
+# #      include_mannwhitney_detail: true
+# #      mannwhitney_detail_top_k: 1
+
+# #  - name: weight_early_signal
+# #    functional_metric: test_loss
+# #    higher_is_better: false
+# #    use_partitioned_cache: true
+# #    partition_batch_size: 250000
+# #    epoch_mid: 15
+# #    bottom_frac_mid: 0.30
+# #    top_frac_end: 0.30
+# #    prediction_epochs: [ ]   # optional; auto-selects <= epoch_mid when empty
+# #    metric_family: all
+# #    metric: all
+# #    scope: all
+# #    include_model_row: true
+# #    top_quantile: 0.20
+# #    plot:
+# #      enabled: true
+# #      top_k_metrics: 10
+# #      include_auc_detail: true
+# #      auc_detail_top_k: 1
+# #      include_mannwhitney_detail: true
+# #      mannwhitney_detail_top_k: 1
+
+output_pdf_dir: learning-dynamics/outputs/reports/PDF/
+output_png_dir: learning-dynamics/outputs/reports/PNG/
+output_tables_dir: learning-dynamics/outputs/reports/tables/
+cache_dir: learning-dynamics/outputs/cache/

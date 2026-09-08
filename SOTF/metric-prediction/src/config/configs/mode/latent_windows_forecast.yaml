@@ -1,0 +1,21 @@
+# @package _global_
+# Mode preset: latent-window forecasting.
+# Loads per-checkpoint latent window sequences from .pt files and trains an LSTM
+# over the window axis inside each checkpoint. Forecast targets still use the
+# same sequence.target_mode values as forecasting/latent_forecast:
+# final_value or horizon_value.
+
+defaults:
+  - /data: latent_forecast
+  - /features: latent
+  - /logging: default
+  - /model: lstm_latent_sequences
+  - /sequence: default
+  - /train: latent_forecast
+  - /tune: disabled
+
+mode: latent_windows_forecast
+
+hydra:
+  run:
+    dir: metric-prediction/outputs_forecasting/${now:%Y-%m-%d}/${path_safe:${experiment_name}}/${now:%H-%M-%S-%f}

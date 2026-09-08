@@ -1,0 +1,16 @@
+split:
+  train: 0.7
+  val: 0.15
+  test: 0.15                      # Proportions for train/validation/test splits
+splitter: "RandomSplitter"        # Strategy for splitting the dataset
+batch_size: 90                    # Batch size
+num_workers: 8                    # Number of worker processes for data loading
+drop_last: False                  # Whether to drop the last incomplete batch
+pin_memory: True                  # Whether to pin data in memory for faster access
+prefetch_factor: 4
+
+defaults:
+  - _self_
+  - checkpoints_dataset: tinyimagenet_resnet18_phasetransition
+  - tokenizer: sparse_full_model_resnet
+  - tokens_dataset: per_window_cache

@@ -1,0 +1,66 @@
+# Multi-layer perceptron (MLP) — general / forecasting variant.
+# Larger network suitable for high-dimensional weight-statistic features.
+# Uses smooth L1 loss, layer norm, and cosine-annealing-style LR schedule.
+
+name: mlp_weight_stats
+params:
+  # List of hidden layer widths. Length = number of hidden layers.
+  hidden_layer_sizes: [256, 128, 64]
+
+  # Activation function applied after each hidden layer.
+  # Options: relu | gelu | silu | elu | leaky_relu
+  activation: gelu
+
+  # Dropout probability applied after each hidden layer. 0.0 = no dropout.
+  dropout: 0.1
+
+  # Apply layer normalisation before the activation in each hidden layer.
+  use_layer_norm: true
+
+  # Mini-batch size for stochastic gradient descent.
+  batch_size: 128
+
+  # Initial learning rate for the Adam optimiser.
+  learning_rate: 0.001
+  learning_rate_init: ${.learning_rate}   # alias used by some scikit-learn interfaces
+
+  # L2 weight decay (AdamW regularisation).
+  weight_decay: 0.0001
+  alpha: ${.weight_decay}   # alias used by some scikit-learn interfaces
+
+  # Maximum number of training epochs.
+  max_epochs: 500
+  max_iter: ${.max_epochs}   # alias used by some scikit-learn interfaces
+
+  # Stop training early when validation loss stops improving.
+  early_stopping: true
+  # Number of epochs without improvement before stopping.
+  patience: 40
+  n_iter_no_change: ${.patience}   # alias
+
+  # Fraction of training data held out as validation for early stopping.
+  validation_fraction: 0.15
+
+  # Optimiser. Options: adam | sgd | lbfgs
+  solver: adam
+
+  # LR schedule: reduce LR by scheduler_factor when val loss plateaus for scheduler_patience epochs.
+  scheduler_factor: 0.5
+  scheduler_patience: 12
+  min_learning_rate: 0.00001
+
+  # Clip gradient norm to this value. null = no clipping.
+  gradient_clip_norm: 1.0
+
+  # Loss function. Options: mse | smooth_l1
+  loss: smooth_l1
+
+  # Standardise features to zero mean / unit variance before training.
+  scale_features: true
+  # Standardise the target variable before training (improves convergence).
+  scale_target: true
+
+  # Device for training. Options: auto | cpu | cuda | mps
+  device: auto
+
+  random_state: ${train.random_seed}

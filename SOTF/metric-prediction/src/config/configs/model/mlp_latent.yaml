@@ -1,0 +1,47 @@
+# Multi-layer perceptron (MLP) — latent-representation variant.
+# Smaller, more regularised network suited for compact latent vectors (z_* dims).
+# Latent features are already clean embeddings, so no dropout or layer norm needed.
+
+name: mlp_latent
+params:
+  # Smaller architecture for low-dimensional latent inputs.
+  hidden_layer_sizes: [64, 32]
+
+  # Options: relu | gelu | silu | elu | leaky_relu
+  activation: gelu
+
+  # No dropout: latent representations are already regularised by the encoder.
+  dropout: 0.0
+
+  use_layer_norm: true
+
+  # Small batch size suited for smaller latent datasets.
+  batch_size: 16
+
+  learning_rate: 0.001
+
+  # Stronger weight decay to compensate for the small dataset size.
+  weight_decay: 0.001
+
+  # More epochs with generous patience — latent datasets are often small.
+  max_epochs: 1000
+  early_stopping: true
+  patience: 60
+
+  validation_fraction: 0.15
+
+  scheduler_factor: 0.5
+  scheduler_patience: 15
+  min_learning_rate: 0.00001
+  gradient_clip_norm: 1.0
+
+  # Loss function. Options: mse | smooth_l1
+  loss: smooth_l1
+
+  scale_features: true
+  scale_target: true
+
+  # Options: auto | cpu | cuda | mps
+  device: auto
+
+  random_state: ${train.random_seed}

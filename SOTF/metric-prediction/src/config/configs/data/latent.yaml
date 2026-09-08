@@ -1,0 +1,24 @@
+# Data config for latent mode.
+# Loads latent embeddings from a PyTorch .pt file and pairs them with
+# per-model target values from a separate parquet file.
+
+# Absolute path to the .pt file containing latent vectors (required — no default).
+# Expected format: dict[model_id -> Tensor] or a structured checkpoint.
+pt_train_path: null
+pt_val_path: null
+
+# Absolute path to a parquet file containing (model_id, epoch, target) rows.
+# Used to align latent vectors with their ground-truth labels (required — no default).
+target_parquet_path: null
+
+# Column in the target parquet used as the regression target.
+# Common options: test_acc | train_acc | test_loss | train_loss
+target_column: test_acc
+
+# Which epoch's target value to align with each model's latent vector.
+# Options: "last" (use the final recorded epoch) | integer epoch number (e.g. 30)
+target_epoch: last
+
+# Normalise model IDs by stripping directory prefixes (basename only).
+# Set to true when .pt keys use bare filenames but parquet uses full paths.
+id_normalize_basename: true

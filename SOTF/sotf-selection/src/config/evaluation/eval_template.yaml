@@ -1,0 +1,94 @@
+# SOTF evaluation config — copy and rename to ds<N>.yaml for each dataset/batch.
+#
+# Usage:
+#   python sotf-selection/evaluate_config.py ds3.yaml
+#   python sotf-selection/evaluate_config.py -cn ds3
+#   python sotf-selection/evaluate_config.py path/to/my_config.yaml
+
+# ── Required ────────────────────────────────────────────────────────────────
+
+# Parent directory whose immediate subdirectories are individual batch outputs.
+# All batches found inside will be evaluated with the same config below.
+batches_dir: sotf-selection/outputs/batch_experiments/horizon_value/ds1
+
+# ── Optional ────────────────────────────────────────────────────────────────
+
+# Override the default output directory.
+# Default: sotf-selection/outputs/evaluation/<auto-name>/
+output_dir: null
+
+# Filters applied when loading runs from the batch.
+# Set a field to constrain which runs are included; null means no constraint.
+filters:
+  predictor: null           # single string or list, e.g. ["xgboost", "naive"]
+  target_column: null       # e.g. "test_acc"
+  target_mode: null         # e.g. "horizon_value"
+  horizon: null             # integer, e.g. 5
+  start_epoch: null         # integer, e.g. 5
+  interval: null            # integer, e.g. 5
+  survival_rate: null       # float, e.g. 0.75
+
+# ── Plots ───────────────────────────────────────────────────────────────────
+# Each plot can be toggled with `enabled: true/false`.
+# Plots that support an `experiments` list will use only those experiment names;
+# set to null (or omit) to include all experiments from the batch.
+
+plots:
+
+  # Horizontal bar chart: mean best-survivor gap per experiment, coloured by
+  # predictor category (baseline / online / offline).
+  best_survivor_gap_by_experiment:
+    enabled: true
+
+  # Side-by-side gap bars comparing two predictors (only rendered when the
+  # batch contains exactly two predictor types).
+  best_survivor_gap_comparison:
+    enabled: true
+
+  # Small-multiples (one panel per run): boxplots of remaining-model accuracy
+  # at each decision epoch.
+  population_accuracy_boxplots:
+    enabled: true
+    experiments: null       # null = all runs in the batch
+
+  # Single figure: grouped boxplots at each epoch, one colour per experiment,
+  # for direct cross-experiment comparison.
+  population_accuracy_comparison_grid:
+    enabled: true
+    experiments: null       # null = all; list to restrict, e.g.:
+    # experiments:
+    #   - naive_baseline
+    #   - xgboost_perf_only
+    #   - weight_statistics_xgboost
+
+  # Cross-batch parameter sensitivity heatmaps (one figure per predictor).
+  # Pools all batches and shows how start_epoch, interval, and survival_rate
+  # jointly affect key metrics via 2-D heatmaps (one row per parameter pair,
+  # one column per metric).  Automatically skipped when fewer than two
+  # parameters vary across the collected batches.
+  parameter_sensitivity:
+    enabled: true
+    metrics: null           # null = [best_survivor_regret, oracle_top_k_recall]
+    # metrics:
+    #   - best_survivor_regret
+    #   - oracle_top_k_recall
+    #   - compute_savings_fraction
+    baseline_predictor: null  # null = "online_lc_extrapolation"; use "naive" for naive baseline
+
+  # Same grid as parameter_sensitivity but each cell shows (experiment − naive baseline).
+  # Green = better than baseline, red = worse, white = no difference.
+  # Skipped automatically when no naive baseline experiment is present.
+  parameter_sensitivity_delta:
+    enabled: true
+
+  compute_savings_sensitivity:
+    enabled: true
+
+  quality_compute_pareto:
+    enabled: true
+
+  parameter_sensitivity_delta_with_compute:
+    enabled: true
+
+  efficiency_ratio:
+    enabled: true           # null = [best_survivor_regret, oracle_top_k_recall]

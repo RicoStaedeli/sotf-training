@@ -1,0 +1,44 @@
+datasets:
+  1_cifar10_uniform_large:
+    root_dir: /ds2/weight_space_learning/model_zoos/core-modelzoo/cnn-large_cifar10/tune_zoo_cifar10_uniform_large
+    dstype: Seed
+  2_cifar10_large_hyp_random_seeds:
+    root_dir: /ds2/weight_space_learning/model_zoos/core-modelzoo/cnn-large_cifar10/tune_zoo_cifar10_large_hyperparameter_10_random_seeds
+    dstype: Hyp-rand
+  3_cifar10_large_hyp_fixed_seeds:
+    root_dir: /ds2/weight_space_learning/model_zoos/core-modelzoo/cnn-large_cifar10/tune_zoo_cifar10_large_hyperparameter_10_fixed_seeds
+    dstype: Hyp-fix
+  4_cifar10_resnet18_kaiming:
+    root_dir: /ds2/weight_space_learning/model_zoos/core-modelzoo/resnet18_cifar10/tune_zoo_cifar10_resnet18_kaiming_uniform
+    dstype: Seed
+  5_cifar10_Resnet18_width_2-256:
+    root_dir: /ds2/model_zoos/taxonomy/cifar_10/zoos/Cifar-10/Resnet18_width_v2/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256
+    dstype: Seed
+  6_cifar10_Resnet50_width_2-256:
+    root_dir: /ds2/model_zoos/taxonomy/cifar_10/zoos/Cifar-10/Resnet50_width_v2/tune_zoo_cifar-10_Resnet50_width_kaiming_uniform_150eps_width_2-256
+    dstype: Seed
+  7_cifar10_ViT:
+    root_dir: /ds2/model_zoos/taxonomy/cifar_10/zoos/Cifar-10/ViT/tune_zoo_cifar-10_ViT_ADAMW_300eps_width_6-192_bs_512-8_LR_0.006_patch_size_4_epoch_300
+    dstype: ViT
+  8_stl10_uniform_large:
+    root_dir: /ds2/weight_space_learning/model_zoos/core-modelzoo/cnn-large_stl10/tune_zoo_stl_uniform_large
+    dstype: Seed
+  9_stl10_large_hyp_random_seeds:
+    root_dir: /ds2/weight_space_learning/model_zoos/core-modelzoo/cnn-large_stl10/tune_zoo_stl_large_hyperparameter_10_random_seeds
+    dstype: Hyp-rand
+  10_stl10_large_hyp_fixed_seeds:
+    root_dir: /ds2/weight_space_learning/model_zoos/core-modelzoo/cnn-large_stl10/tune_zoo_stl_large_hyperparameter_10_fixed_seeds
+    dstype: Hyp-fix
+  11_tinyimagenet_resnet18_kaiming:
+    root_dir: /ds2/weight_space_learning/model_zoos/core-modelzoo/resnet18_tinyimagenet/tune_zoo_tinyimagenet_resnet18_kaiming_uniform
+    dstype: Seed
+  12_phase_resnet18_tinyimagenet:
+    root_dir: /ds2/weight_space_learning/model_zoos/phase_transitions-modelzoo/resnet18_tinyimagenet
+    dstype: Seed
+  13_phase_resnet50_tinyimagenet:
+    root_dir: /ds2/model_zoos/taxonomy/tiny_imagenet/zoos/TinyImageNet/Resnet50_width_v2/tune_zoo_tinyimagenet_Resnet50_width_kaiming_uniform_100eps_width_4-256
+    dstype: Seed
+  14_phase_resnet18_tinyimagenet_width_4-256:
+    root_dir: /ds2/model_zoos/taxonomy/tiny_imagenet/zoos/TinyImageNet/Resnet18_width_v2/tune_zoo_tinyimagenet_Resnet18_width_kaiming_uniform_100eps_width_4-256
+    dstype: Seed
+

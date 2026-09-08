@@ -1,0 +1,5 @@
+name: forecast_model
+model_bundle_path: null
+used_features_path: null
+use_bundle_feature_config: true
+use_bundle_sequence_config: true

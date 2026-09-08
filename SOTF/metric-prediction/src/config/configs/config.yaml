@@ -1,0 +1,18 @@
+# Top-level Hydra config. Selects a mode preset and sets the experiment name.
+# Override mode on the CLI:
+# mode=forecasting | mode=latent | mode=latent_forecast | mode=latent_windows_forecast | mode=latent_windows_transformer_forecast
+# (default: prediction)
+# Each mode preset (mode/*.yaml) injects all mode-specific group defaults automatically.
+
+defaults:
+  - mode: prediction
+  - wandb: null
+  - _self_
+
+experiment_name: metric_prediction   # used for output directory naming and log file names
+
+hydra:
+  run:
+    dir: metric-prediction/outputs/${now:%Y-%m-%d}/${now:%H-%M-%S}
+  job:
+    chdir: false   # keep working directory at the repo root

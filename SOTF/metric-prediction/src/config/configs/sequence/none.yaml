@@ -1,0 +1,3 @@
+# Sequence feature config — disabled.
+# Used by prediction and latent modes where no lag / horizon features are needed.
+enabled: false

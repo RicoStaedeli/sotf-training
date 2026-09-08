@@ -1,0 +1,8 @@
+target_mode: horizon_value
+horizon: 5
+max_lag: 3
+min_history: 1
+add_delta_features: true
+include_time_features: true
+include_current_target: false
+include_terminal_samples: false

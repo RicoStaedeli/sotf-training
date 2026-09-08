@@ -1,0 +1,50 @@
+# Sequence feature config for forecasting mode.
+# Controls how lag features and the forecast target are constructed from the
+# time-ordered weight-statistic snapshots of each model.
+
+enabled: true
+
+# What the model should predict for each sample.
+# Options:
+#   final_value     — the target metric at the very last epoch of the model
+#   horizon_value   — the target metric exactly `horizon` epochs after the current epoch
+#   delta_to_final  — difference between the final value and the current value
+target_mode: final_value
+
+# Number of epochs ahead to predict when target_mode=horizon_value.
+# Must match the horizon used when saving a model_bundle for sotf-select.
+horizon: 5
+
+# Number of lagged epochs to include as additional features.
+# lag=1 adds features from t-1, lag=2 adds t-1 and t-2, etc.
+# Higher values provide more history but also increase dimensionality.
+max_lag: 3
+
+# Minimum number of observed epochs required for a sample to be included.
+# Samples with fewer than min_history prior epochs are discarded.
+min_history: 1
+
+# Add first-order difference features (x_t - x_{t-lag}) for each lag and statistic.
+# Captures the rate of change of weight statistics over time.
+add_delta_features: true
+
+# Add scalar time-index features: epoch, history_length, max_epoch,
+# epochs_remaining, epoch_gap_prev, progress_fraction.
+include_time_features: true
+
+# Include the current observed value of the target column as an input feature.
+# Useful when the current accuracy is a strong predictor of the future.
+include_current_target: false
+
+# Include samples from the very last epoch of a model's training run.
+# These have no horizon target when target_mode=horizon_value, so they are
+# excluded by default to avoid NaN targets.
+include_terminal_samples: false
+
+# Observed performance metric columns to include as lag/delta features alongside
+# the weight statistics. Each column produces observed_metric__<col>__lag_0 …
+# lag_N and (if add_delta_features) __delta_1 … delta_N features.
+# Use "current_target" to reference the target column itself (e.g. test_acc).
+# All columns must be present in the dataset; missing ones are skipped with a warning.
+# Example: [current_target, test_acc, train_acc, test_loss, train_loss]
+observed_metric_columns: []

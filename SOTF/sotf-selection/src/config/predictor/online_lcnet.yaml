@@ -1,0 +1,27 @@
+name: online_lcnet
+max_history_points: 8
+min_train_rows: 10
+min_train_models: 2
+fallback_strategy: current_target
+params:
+  hidden_layer_sizes: [128, 128]
+  activation: relu
+  dropout: 0.1
+  use_layer_norm: false
+  batch_size: 512
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  max_epochs: 120
+  patience: 15
+  validation_fraction: 0.15
+  early_stopping: true
+  scheduler_factor: 0.5
+  scheduler_patience: 8
+  min_learning_rate: 0.00001
+  gradient_clip_norm: 1.0
+  scale_features: true
+  scale_target: true
+  random_state: 42
+  device: auto
+  loss: smooth_l1
+  mc_samples: 30

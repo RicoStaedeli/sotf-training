@@ -1,0 +1,13 @@
+class: "ZooDataset"                # The CheckpointsDataset class to use
+epoch_idx: [10, 20, 30,  40, 50]             # List of epoch indices to include in the dataset
+drop_nan: False                    # Whether to drop checkpoints with NaN values
+max_absolute_weight: null          # The maximum allowed absolute weight for checkpoints, ignored if null
+max_checkpoints: 1000               # Maximum number of checkpoints to load (null = no limit)
+augmentations:
+  align: False                      # Whether to align checkpoints using weight matching
+  num_permutations: 3              # The number of permutations to generate for each checkpoint
+  # We provide the name of the permutation spec in sane.utils.git_re_basin.py
+  permutation_spec: resnet18_permutation_spec
+
+# Root folder of the model zoo
+root_dir: "/ds2/weight_space_learning/model_zoos/core-modelzoo/resnet18_cifar10/tune_zoo_cifar10_resnet18_kaiming_uniform"

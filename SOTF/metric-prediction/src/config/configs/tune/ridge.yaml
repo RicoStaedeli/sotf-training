@@ -1,0 +1,32 @@
+# Ray Tune config for Ridge regression hyperparameter search.
+# Activate with: tune=ridge model=ridge
+
+enabled: true
+experiment_name: ridge_tune
+
+# Total number of hyperparameter configurations to trial.
+num_samples: 6
+
+# Metric and direction used to pick the best trial.
+# Options: rmse | mae | r2  /  min | max
+metric: rmse
+mode: min
+
+max_concurrent_trials: 4
+resources_per_trial:
+  cpu: 6
+  gpu: 0
+
+# Search space: each key maps to a sampler and its bounds.
+# Supported samplers: randint | uniform | loguniform | choice
+search_space:
+  alpha:
+    sampler: loguniform
+    lower: 1.0e-4
+    upper: 100.0
+  fit_intercept:
+    sampler: choice
+    values: [true, false]
+  solver:
+    sampler: choice
+    values: [auto, svd, cholesky, lsqr, sparse_cg, sag, saga]

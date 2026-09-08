@@ -1,0 +1,32 @@
+# Training config for latent_forecast mode.
+# Like the forecasting train config but operates within Hydra's run dir (artifacts_dir)
+# and disables SHAP (not applicable to opaque latent embeddings).
+# Shuffle is disabled because temporal order of embeddings must be preserved for lag features.
+
+random_seed: 42
+
+# If true, request deterministic PyTorch algorithms and disable cuDNN
+# benchmarking. This can reduce throughput and may raise if an op has no
+# deterministic implementation on the current backend.
+deterministic: true
+
+# If true, disable TF32 matrix math on CUDA to reduce backend-specific numeric
+# drift on Ampere/Hopper GPUs. Has no effect on CPU and MPS.
+disable_tf32: true
+
+# Fraction of models held out for validation (grouped split by model_id).
+validation_size: 0.2
+
+# Save the fitted model + preprocessor + sequence config as model_bundle.pt for
+# PyTorch models and model_bundle.pkl for sklearn/XGBoost/LightGBM-style models.
+save_model: true
+
+# Save per-sample validation predictions to validation_predictions.parquet.
+save_predictions: true
+
+# Save the expanded lag-feature matrix to forecast_feature_matrix.parquet.
+# Can be large when max_lag is high and the embedding dimension is large.
+save_feature_matrix: false
+
+# Subdirectory inside the Hydra run directory where all output files are written.
+artifacts_dir: artifacts

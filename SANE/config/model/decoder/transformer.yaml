@@ -1,0 +1,5 @@
+architecture: "transformer"             # Architecture type
+d_model: 2048                           # Internal token dimension of the transformer model
+nhead: 16                               # Number of attention heads in the transformer
+num_layers: 8                           # Number of layers in the transformer
+position_embedding: "learned"           # Type of position embedding to use

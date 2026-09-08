@@ -1,0 +1,48 @@
+# @package _global_
+
+hydra:
+  job:
+    chdir: false
+dry_run: false
+
+batch_name: ds9
+output_root: metric-prediction/outputs/forecasting/latent_averaged/horizon/xgboost
+batch_root_subdir: null
+evaluation:
+  kind: forecasting
+common_overrides:
+  mode: latent_forecast
+  data.pt_train_path: metric-prediction/cache/latent_representation_datasets/ds_9_tune_zoo_stl_large_hyperparameter_10_random_seeds_encoded_checkpoints/averaged/tune_zoo_stl_large_hyperparameter_10_random_seeds_latent_representations_train.pt
+  data.pt_val_path: metric-prediction/cache/latent_representation_datasets/ds_9_tune_zoo_stl_large_hyperparameter_10_random_seeds_encoded_checkpoints/averaged/tune_zoo_stl_large_hyperparameter_10_random_seeds_latent_representations_val.pt
+  ++data.target_parquet_path: metric-prediction/cache/prepared_datasets/9_stl10_large_hyp_random_seeds_full_all_metrics_long__prepared_dataset.parquet
+  data.target_column: test_acc
+  data.target_model_min_threshold: 0
+  train.random_seed: 42
+  train.save_predictions: true
+  train.save_feature_matrix: false
+  sequence.add_delta_features: true
+  sequence.include_time_features: true
+  sequence.max_lag: 3
+  sequence.min_history: 4
+  sequence.target_mode: horizon_value
+  model: xgboost
+
+runs:
+
+  - experiment_name: ds9_latent_xgb_horizon_5
+    overrides:
+      sequence.horizon: 5
+
+  - experiment_name: ds9_latent_xgb_horizon_10
+    overrides:
+      sequence.horizon: 10
+
+  - experiment_name: ds9_latent_xgb_horizon_5_with_perf
+    overrides:
+      sequence.horizon: 5
+      sequence.observed_metric_columns: [test_acc, train_acc, test_loss, train_loss]
+
+  - experiment_name: ds9_latent_xgb_horizon_10_with_perf
+    overrides:
+      sequence.horizon: 10
+      sequence.observed_metric_columns: [test_acc, train_acc, test_loss, train_loss]

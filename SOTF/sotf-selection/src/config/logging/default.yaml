@@ -1,0 +1,3 @@
+level: INFO
+save_to_file: true
+filename: ${path_safe:${experiment_name}}.log

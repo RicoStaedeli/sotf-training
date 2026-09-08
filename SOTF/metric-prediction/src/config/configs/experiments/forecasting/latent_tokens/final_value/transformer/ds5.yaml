@@ -1,0 +1,157 @@
+# @package _global_
+# Hierarchical Transformer on ds5 token sequences (final-value forecast).
+# Run with:
+#   uv run metric-prediction/runner.py -cn experiments/forecasting/latent_tokens/final_value/transformer/ds5
+#
+# Dataset: ds5 — cifar10_Resnet18_width_kaiming_uniform_150eps
+# Input: per-checkpoint raw token sequences  (tokens variant)
+# Target: test_acc  final-value forecast
+#
+# NOTE on sequence lengths:
+#   ds5 token sequences are long (max ~640k tokens).
+#   A flat transformer (local_window_size=1) would require O(N²) attention
+#   memory and is infeasible. We sweep large local_window_size values so the
+#   global sequence length stays manageable after chunking, using ALL tokens
+#   without any max_seq_len truncation.
+#
+#   local_window_size=128  → global ≤ ceil(640768/128) = 5006 windows
+#   local_window_size=256  → global ≤ ceil(640768/256) = 2503 windows
+#   local_window_size=512  → global ≤ ceil(640768/512) = 1251 windows
+
+batch_name: ds5
+output_root: metric-prediction/outputs/forecasting/latent_tokens/final_value/transformer
+batch_root_subdir: null
+evaluation:
+  kind: forecasting
+
+common_overrides:
+  mode: latent_windows_transformer_forecast
+  data.pt_train_path: /netscratch1/rstaedeli/local/latent_exports/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_encoded_checkpoints/tokens/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_latent_representations_train_tokens_manifest.pt
+  data.pt_val_path: /netscratch1/rstaedeli/local/latent_exports/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_encoded_checkpoints/tokens/tune_zoo_cifar-10_Resnet18_width_kaiming_uniform_150eps_width_2-256_latent_representations_val_tokens_manifest.pt
+  ++data.target_parquet_path: metric-prediction/cache/prepared_datasets/5_cifar10_Resnet18_width_2-256_full_all_metrics_long__prepared_dataset.parquet
+  data.target_column: test_acc
+  data.target_model_min_threshold: 0
+  train.random_seed: 42
+  train.save_predictions: true
+  train.save_feature_matrix: false
+  sequence.add_delta_features: true
+  sequence.include_time_features: true
+  sequence.max_lag: 3
+  sequence.min_history: 4
+  sequence.target_mode: final_value
+  sequence.horizon: 5
+  model: hierarchical_transformer
+  model.params.scale_features: false
+
+runs:
+
+  - experiment_name: ds5_tokens_transformer_final_hier128_small
+    overrides:
+      model.params.local_window_size: 128
+      model.params.d_model: 64
+      model.params.nhead: 4
+      model.params.num_local_layers: 1
+      model.params.num_global_layers: 2
+      model.params.dim_feedforward: 128
+      model.params.dropout: 0.0
+      model.params.head_hidden_layer_sizes: [32]
+      model.params.use_positional_encoding: true
+      model.params.batch_size: 8
+      model.params.learning_rate: 0.001
+      model.params.weight_decay: 0.001
+      model.params.max_epochs: 200
+      model.params.patience: 20
+      model.params.scheduler_patience: 8
+
+  # - experiment_name: ds5_tokens_transformer_final_hier256_small
+  #   overrides:
+  #     model.params.local_window_size: 256
+  #     model.params.d_model: 64
+  #     model.params.nhead: 4
+  #     model.params.num_local_layers: 1
+  #     model.params.num_global_layers: 2
+  #     model.params.dim_feedforward: 128
+  #     model.params.dropout: 0.0
+  #     model.params.head_hidden_layer_sizes: [32]
+  #     model.params.use_positional_encoding: true
+  #     model.params.batch_size: 8
+  #     model.params.learning_rate: 0.001
+  #     model.params.weight_decay: 0.001
+  #     model.params.max_epochs: 200
+  #     model.params.patience: 20
+  #     model.params.scheduler_patience: 8
+
+  # - experiment_name: ds5_tokens_transformer_final_hier512_small
+  #   overrides:
+  #     model.params.local_window_size: 512
+  #     model.params.d_model: 64
+  #     model.params.nhead: 4
+  #     model.params.num_local_layers: 1
+  #     model.params.num_global_layers: 2
+  #     model.params.dim_feedforward: 128
+  #     model.params.dropout: 0.0
+  #     model.params.head_hidden_layer_sizes: [32]
+  #     model.params.use_positional_encoding: true
+  #     model.params.batch_size: 8
+  #     model.params.learning_rate: 0.001
+  #     model.params.weight_decay: 0.001
+  #     model.params.max_epochs: 200
+  #     model.params.patience: 20
+  #     model.params.scheduler_patience: 8
+
+  - experiment_name: ds5_tokens_transformer_final_hier128_small_with_perf
+    overrides:
+      model.params.local_window_size: 128
+      model.params.d_model: 64
+      model.params.nhead: 4
+      model.params.num_local_layers: 1
+      model.params.num_global_layers: 2
+      model.params.dim_feedforward: 128
+      model.params.dropout: 0.0
+      model.params.head_hidden_layer_sizes: [32]
+      model.params.use_positional_encoding: true
+      model.params.batch_size: 8
+      model.params.learning_rate: 0.001
+      model.params.weight_decay: 0.001
+      model.params.max_epochs: 200
+      model.params.patience: 20
+      model.params.scheduler_patience: 8
+      sequence.observed_metric_columns: [test_acc, train_acc, test_loss, train_loss]
+
+  # - experiment_name: ds5_tokens_transformer_final_hier256_small_with_perf
+  #   overrides:
+  #     model.params.local_window_size: 256
+  #     model.params.d_model: 64
+  #     model.params.nhead: 4
+  #     model.params.num_local_layers: 1
+  #     model.params.num_global_layers: 2
+  #     model.params.dim_feedforward: 128
+  #     model.params.dropout: 0.0
+  #     model.params.head_hidden_layer_sizes: [32]
+  #     model.params.use_positional_encoding: true
+  #     model.params.batch_size: 8
+  #     model.params.learning_rate: 0.001
+  #     model.params.weight_decay: 0.001
+  #     model.params.max_epochs: 200
+  #     model.params.patience: 20
+  #     model.params.scheduler_patience: 8
+  #     sequence.observed_metric_columns: [test_acc, train_acc, test_loss, train_loss]
+
+  # - experiment_name: ds5_tokens_transformer_final_hier512_small_with_perf
+  #   overrides:
+  #     model.params.local_window_size: 512
+  #     model.params.d_model: 64
+  #     model.params.nhead: 4
+  #     model.params.num_local_layers: 1
+  #     model.params.num_global_layers: 2
+  #     model.params.dim_feedforward: 128
+  #     model.params.dropout: 0.0
+  #     model.params.head_hidden_layer_sizes: [32]
+  #     model.params.use_positional_encoding: true
+  #     model.params.batch_size: 8
+  #     model.params.learning_rate: 0.001
+  #     model.params.weight_decay: 0.001
+  #     model.params.max_epochs: 200
+  #     model.params.patience: 20
+  #     model.params.scheduler_patience: 8
+  #     sequence.observed_metric_columns: [test_acc, train_acc, test_loss, train_loss]

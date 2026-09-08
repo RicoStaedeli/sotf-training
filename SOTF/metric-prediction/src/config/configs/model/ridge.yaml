@@ -1,0 +1,19 @@
+# Ridge regression model (L2-regularised linear regression).
+# Fast baseline; interpretable coefficients; works well when features >> samples.
+
+name: ridge
+params:
+  # L2 regularisation strength. Larger values → stronger regularisation → simpler model.
+  # Range: 1e-4 – 1e4  (tune with tune=ridge)
+  alpha: 1.0
+
+  # Whether to fit a bias/intercept term.
+  fit_intercept: true
+
+  # Linear solver algorithm.
+  # Options: auto | svd | cholesky | lsqr | sparse_cg | sag | saga
+  # auto = Hydra selects based on data shape; svd is most numerically stable.
+  solver: auto
+
+  # Seed for solvers that use randomness (sag, saga). Tied to train.random_seed.
+  random_state: ${train.random_seed}

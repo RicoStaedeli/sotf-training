@@ -1,0 +1,22 @@
+split:
+  train: 0.8
+  val: 0.0
+  test: 0.2
+splitter: "RandomSplitter"              # Strategy for splitting the dataset
+batch_size: 4                           # Small batch size for fast iteration
+num_workers: 0                          # No multiprocessing for simplicity
+drop_last: False                        # Whether to drop the last incomplete batch
+prefetch_factor: 4
+pin_memory: True
+
+# Dummy data generation parameters
+num_fake_checkpoints: 50                # Number of fake checkpoints to generate
+fake_model_input_dim: 8                 # Input dimension of fake models
+fake_model_hidden_dim: 16               # Hidden dimension of fake models
+fake_model_output_dim: 4                # Output dimension of fake models
+fake_model_num_layers: 2                # Number of layers in fake models
+
+defaults:
+  - _self_
+  - tokenizer: dense_full_model
+  - tokens_dataset: single_window

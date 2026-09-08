@@ -1,0 +1,85 @@
+datasets:
+  - 1_cifar10_uniform_large
+  - 2_cifar10_large_hyp_random_seeds
+  # - 3_cifar10_large_hyp_fixed_seeds
+  # - 4_cifar10_resnet18_kaiming
+  # - 5_cifar10_Resnet18_width_2-256
+  # - 6_cifar10_Resnet50_width_2-256
+  # - 7_cifar10_ViT
+  # - 8_stl10_uniform_large
+  # - 9_stl10_large_hyp_random_seeds
+  # - 10_stl10_large_hyp_fixed_seeds
+  # - 11_tinyimagenet_resnet18_kaiming
+  # - 12_phase_resnet18_tinyimagenet
+  - 14_phase_resnet18_tinyimagenet_width_4-256
+
+epoch_col: training_iteration
+model_col: model_name
+
+metric_aliases:
+  validation_acc: [validation_acc, val_acc]
+  validation_loss: [validation_loss, val_loss]
+
+analyses:
+  - name: acc_curves
+    metric: test_acc
+    epoch_range: [ ]
+    png_dpi: 200
+    avg_curves: false
+    boxplot_curves: true
+    boxplot_overview:
+      enabled: true
+      show_title: false
+      single_page:
+        enabled: true
+        ncols: 3
+      paged:
+        enabled: false
+        nrows: 2
+        ncols: 2
+
+#  - name: weight_early_signal
+#    functional_metric: test_acc
+#    higher_is_better: true
+#    use_partitioned_cache: true
+#    partition_batch_size: 250000
+#    epoch_mid: 15
+#    bottom_frac_mid: 0.30
+#    top_frac_end: 0.30
+#    prediction_epochs: [ ]   # optional; auto-selects <= epoch_mid when empty
+#    metric_family: all
+#    metric: all
+#    scope: all
+#    include_model_row: true
+#    top_quantile: 0.20
+#    plot:
+#      enabled: true
+#      top_k_metrics: 10
+#      include_auc_detail: true
+#      auc_detail_top_k: 1
+#      include_mannwhitney_detail: true
+#      mannwhitney_detail_top_k: 1
+
+#  - name: delta_to_best
+#    metric: test_acc
+#    higher_is_better: true
+#    epoch_range: [ ]
+#    window_k: 5                 # How many epochs at start and end to use to build mean values
+#    use_mad: true               # whether to integrate mad or not.
+#    plot:
+#      enabled: true
+#      selection_mode: rank_bands # rank_bands | top_n
+#      best_n: 3
+#      middle_n: 3
+#      worst_n: 3
+#      top_n: 12                  # used only when selection_mode=top_n
+#      ncols: 4
+#      figsize: [ 12, 9 ]
+#      dpi: 200
+#      use_log: false
+
+
+output_pdf_dir: learning-dynamics/outputs/reports/PDF/
+output_png_dir: learning-dynamics/outputs/reports/PNG/
+output_tables_dir: learning-dynamics/outputs/reports/tables/
+cache_dir: learning-dynamics/outputs/cache/

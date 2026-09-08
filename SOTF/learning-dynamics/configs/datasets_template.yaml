@@ -1,0 +1,13 @@
+datasets:
+  ds1:
+    root_dir: data/tune_zoo_cifar10_small_hyperparameter_10_random_seeds
+    dstype:
+      Hyp-rand
+  ds2:
+    root_dir: data/ViT
+    dstype: ViT
+  ds3:
+    root_dir: data/tune_zoo_cifar10_resnet18_kaiming_uniform
+    dstype:
+      Seed
+

@@ -1,0 +1,41 @@
+# @package _global_
+# Mode preset: latent-window hierarchical-transformer forecasting.
+#
+# Loads per-checkpoint latent sequences from .pt files and trains a
+# hierarchical transformer over the token/window axis inside each checkpoint.
+# Reuses the same data pipeline as latent_windows_forecast (LSTM mode).
+#
+# Quick-start
+# -----------
+# Flat transformer (windows dataset, local_window_size=1):
+#   uv run metric-predict-forecast \
+#     mode=latent_windows_transformer_forecast \
+#     experiment_name=my_exp \
+#     data.pt_train_path=<path>_train_windows.pt \
+#     data.pt_val_path=<path>_val_windows.pt \
+#     data.target_parquet_path=<path>.parquet \
+#     data.target_column=test_acc
+#
+# Hierarchical transformer (tokens dataset, local_window_size=8):
+#   uv run metric-predict-forecast \
+#     mode=latent_windows_transformer_forecast \
+#     experiment_name=my_exp \
+#     model.params.local_window_size=8 \
+#     model.params.num_local_layers=2 \
+#     data.pt_train_path=<path>_train_tokens.pt \
+#     ...
+
+defaults:
+  - /data: latent_forecast
+  - /features: latent
+  - /logging: default
+  - /model: hierarchical_transformer
+  - /sequence: default
+  - /train: latent_forecast
+  - /tune: disabled
+
+mode: latent_windows_transformer_forecast
+
+hydra:
+  run:
+    dir: metric-prediction/outputs_forecasting/${now:%Y-%m-%d}/${path_safe:${experiment_name}}/${now:%H-%M-%S-%f}

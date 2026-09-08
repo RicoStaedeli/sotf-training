@@ -1,0 +1,116 @@
+# @package _global_
+
+hydra:
+  job:
+    chdir: false
+dry_run: false
+
+batch_name: ds2
+output_root: metric-prediction/outputs/forecasting/weight_statistics/final_value/xgboost
+batch_root_subdir: null
+evaluation:
+  kind: forecasting
+
+common_overrides:
+  mode: forecasting
+  data.target_column: test_acc
+  data.target_model_min_threshold: 0
+  data.pt_train_path: metric-prediction/cache/weight_statistic_datasets/2_cifar10_large_hyp_random_seeds_full_all_metrics_long/weight_statistics_train.pt
+  data.pt_val_path: metric-prediction/cache/weight_statistic_datasets/2_cifar10_large_hyp_random_seeds_full_all_metrics_long/weight_statistics_val.pt
+  train.random_seed: 42
+  train.save_predictions: true
+  train.save_feature_matrix: false
+  features.include_model_metrics: true
+  features.metric_families: [distribution]
+  sequence.target_mode: final_value
+  model: xgboost
+
+runs:
+
+  - experiment_name: ds2_ws_fv_nolag_xgb
+    overrides:
+      features.include_layer_metrics: false
+      sequence.add_delta_features: false
+      sequence.include_time_features: false
+      sequence.max_lag: 0
+      sequence.min_history: 0
+
+  - experiment_name: ds2_ws_fv_nolag_xgb_with_perf
+    overrides:
+      features.include_layer_metrics: false
+      sequence.add_delta_features: false
+      sequence.include_time_features: false
+      sequence.max_lag: 0
+      sequence.min_history: 0
+      sequence.observed_metric_columns: [test_acc, train_acc, test_loss, train_loss]
+
+  - experiment_name: ds2_ws_fv_lag3_xgb
+    overrides:
+      features.include_layer_metrics: false
+      sequence.add_delta_features: false
+      sequence.include_time_features: false
+      sequence.max_lag: 3
+      sequence.min_history: 4
+
+  - experiment_name: ds2_ws_fv_lag3_xgb_with_perf
+    overrides:
+      features.include_layer_metrics: false
+      sequence.add_delta_features: false
+      sequence.include_time_features: false
+      sequence.max_lag: 3
+      sequence.min_history: 4
+      sequence.observed_metric_columns: [test_acc, train_acc, test_loss, train_loss]
+
+  - experiment_name: ds2_ws_fv_lag3_delta_xgb
+    overrides:
+      features.include_layer_metrics: false
+      sequence.add_delta_features: true
+      sequence.include_time_features: true
+      sequence.max_lag: 3
+      sequence.min_history: 4
+
+  - experiment_name: ds2_ws_fv_lag3_delta_xgb_with_perf
+    overrides:
+      features.include_layer_metrics: false
+      sequence.add_delta_features: true
+      sequence.include_time_features: true
+      sequence.max_lag: 3
+      sequence.min_history: 4
+      sequence.observed_metric_columns: [test_acc, train_acc, test_loss, train_loss]
+
+  - experiment_name: ds2_ws_fv_lag3_delta_layer_xgb
+    overrides:
+      features.include_layer_metrics: true
+      sequence.add_delta_features: true
+      sequence.include_time_features: true
+      sequence.max_lag: 3
+      sequence.min_history: 4
+
+  - experiment_name: ds2_ws_fv_lag3_delta_layer_xgb_with_perf
+    overrides:
+      features.include_layer_metrics: true
+      sequence.add_delta_features: true
+      sequence.include_time_features: true
+      sequence.max_lag: 3
+      sequence.min_history: 4
+      sequence.observed_metric_columns: [test_acc, train_acc, test_loss, train_loss]
+
+  - experiment_name: ds2_ws_fv_nolag_perf_only
+    overrides:
+      features.include_model_metrics: false
+      features.include_layer_metrics: false
+      sequence.add_delta_features: false
+      sequence.include_time_features: false
+      sequence.max_lag: 0
+      sequence.min_history: 0
+      sequence.observed_metric_columns: [test_acc, train_acc, test_loss, train_loss]
+
+  - experiment_name: ds2_ws_fv_lag3_delta_perf_only
+    overrides:
+      features.include_model_metrics: false
+      features.include_layer_metrics: false
+      sequence.add_delta_features: true
+      sequence.include_time_features: true
+      sequence.max_lag: 3
+      sequence.min_history: 4
+      sequence.observed_metric_columns: [test_acc, train_acc, test_loss, train_loss]

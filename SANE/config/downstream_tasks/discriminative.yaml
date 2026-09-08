@@ -1,0 +1,5 @@
+# List tasks to be run with hyperparameters here
+- class: "DiscriminativeDownstreamTask"
+  frequency: 100                              # Frequency (in epochs) to run the downstream task
+  regression_targets: ['test_acc', 'ggap']    # Targets for regression tasks
+  classification_targets: ['model::nlin']     # Targets for classification tasks

@@ -1,0 +1,27 @@
+# @package _global_
+# Mode preset: latent-representation forecasting.
+# Loads per-epoch latent vectors from a .pt checkpoint file, expands them into
+# lag/delta/time features, then trains a time-series regressor to predict a
+# future metric value (final_value or horizon_value).
+#
+# Differs from plain forecasting mode in that features are pre-computed latent
+# embeddings (z_* dimensions) instead of raw weight statistics, so feature
+# filtering is skipped and preprocessing uses strategy=none.
+#
+# Switch model via: model=xgboost | model=ridge | model=mlp_latent
+# Adjust horizon/lags via: sequence.horizon=10 sequence.max_lag=5
+
+defaults:
+  - /data: latent_forecast   # per-epoch .pt file + target parquet
+  - /features: latent        # no filtering; forces missing_value_fill=none
+  - /logging: default
+  - /model: xgboost          # options: xgboost | mlp_latent | mlp | ridge
+  - /sequence: default       # lag features, delta features, time features
+  - /train: latent_forecast  # no shuffle; artifacts_dir; no SHAP
+  - /tune: disabled
+
+mode: latent_forecast
+
+hydra:
+  run:
+    dir: metric-prediction/outputs_forecasting/${now:%Y-%m-%d}/${path_safe:${experiment_name}}/${now:%H-%M-%S-%f}

@@ -1,0 +1,119 @@
+# Cross-dataset SOTF evaluation — all final_value datasets in one comparison.
+#
+# Usage:
+#   python sotf-selection/evaluate_config.py final_value/all.yaml
+#   python sotf-selection/evaluate_config.py -cn final_value/all
+#
+# All available final_value datasets share the same three start epochs (20/30/40),
+# mapped uniformly to early / mid / end.
+
+datasets:
+  - name: ds1
+    batches_dir: sotf-selection/outputs/batch_experiments/final_value/ds1
+    extra_batches_dirs:
+      - sotf-selection/outputs/batch_experiments/final_value/lc_baselines_ds1
+    start_epoch_map:
+      20: early
+      30: mid
+      40: end
+
+  - name: ds2
+    batches_dir: sotf-selection/outputs/batch_experiments/final_value/ds2
+    extra_batches_dirs:
+      - sotf-selection/outputs/batch_experiments/final_value/lc_baselines_ds2
+    start_epoch_map:
+      20: early
+      30: mid
+      40: end
+
+  - name: ds3
+    batches_dir: sotf-selection/outputs/batch_experiments/final_value/ds3
+    extra_batches_dirs:
+      - sotf-selection/outputs/batch_experiments/final_value/lc_baselines_ds3
+    start_epoch_map:
+      20: early
+      30: mid
+      40: end
+  
+  - name: ds5
+    batches_dir: sotf-selection/outputs/batch_experiments/final_value/ds5
+    extra_batches_dirs:
+      - sotf-selection/outputs/batch_experiments/final_value/lc_baselines_ds5
+    start_epoch_map:
+      20: early
+      40: mid
+      60: end
+
+  - name: ds7
+    batches_dir: sotf-selection/outputs/batch_experiments/final_value/ds7
+    extra_batches_dirs:
+      - sotf-selection/outputs/batch_experiments/final_value/lc_baselines_ds7
+    start_epoch_map:
+      20: early
+      30: mid
+      40: end
+
+  - name: ds8
+    batches_dir: sotf-selection/outputs/batch_experiments/final_value/ds8
+    extra_batches_dirs:
+      - sotf-selection/outputs/batch_experiments/final_value/lc_baselines_ds8
+    start_epoch_map:
+      20: early
+      30: mid
+      40: end
+
+  - name: ds9
+    batches_dir: sotf-selection/outputs/batch_experiments/final_value/ds9
+    extra_batches_dirs:
+      - sotf-selection/outputs/batch_experiments/final_value/lc_baselines_ds9
+    start_epoch_map:
+      20: early
+      30: mid
+      40: end
+
+  - name: ds10
+    batches_dir: sotf-selection/outputs/batch_experiments/final_value/ds10
+    extra_batches_dirs:
+      - sotf-selection/outputs/batch_experiments/final_value/lc_baselines_ds10
+    start_epoch_map:
+      20: early
+      30: mid
+      40: end
+
+  - name: ds14
+    batches_dir: sotf-selection/outputs/batch_experiments/final_value/ds14
+    extra_batches_dirs:
+      - sotf-selection/outputs/batch_experiments/final_value/lc_baselines_ds14
+    start_epoch_map:
+      20: early
+      30: mid
+      40: end
+
+filters:
+  target_column: test_acc
+  predictor: null
+  target_mode: null
+  horizon: null
+  interval: null
+  survival_rate: null
+
+win_metric: oracle_top_k_recall #best_survivor_regret
+
+output_dir: null
+
+plots:
+  cross_dataset_win_heatmap:
+    enabled: true
+  cross_dataset_win_matrix:
+    enabled: true
+  cross_dataset_best_survivor_gap_bars:
+    enabled: true
+  cross_dataset_gap_dominance_matrix:
+    enabled: true
+    top_n: 28
+  cross_dataset_gap_robustness_scorecard:
+    enabled: true
+    top_n: 34
+  cross_dataset_gap_parameter_map:
+    enabled: true
+    top_n: 18

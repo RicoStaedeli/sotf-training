@@ -1,0 +1,47 @@
+# Feature selection config for prediction and forecasting modes.
+# Controls which weight-statistic columns are used as model inputs.
+# Filters are applied in order: family/scope/layer-type → name patterns → missing/constant.
+
+# --- Broad inclusion toggles ---
+include_model_metrics: true    # include model-level statistics (aggregated across layers)
+include_layer_metrics: true    # include per-layer statistics
+
+# --- Subset filters (empty list = no restriction, i.e. include all) ---
+# Restrict to specific metric families (e.g. [fro_norm, spectral_norm, mean])
+metric_families: []
+# Restrict to specific metric names (e.g. [fro_norm, mean])
+metrics: []
+# Restrict to specific scopes (e.g. [weight, bias, gradient])
+scopes: []
+# Restrict to specific layer types (e.g. [linear, conv2d, batchnorm])
+layer_types: []
+
+# --- Fine-grained feature name / pattern filters ---
+# Include only these exact feature column names (overrides family/scope filters).
+include_feature_names: []
+# Exclude these exact feature column names.
+exclude_feature_names: []
+# Glob-style patterns for inclusion (e.g. [*fro_norm*, *sharp_proxy*])
+include_feature_patterns: []
+# Glob-style patterns for exclusion (e.g. [*max*, *layer_42*])
+exclude_feature_patterns: []
+
+# --- Data quality filters ---
+# Drop features with more than this fraction of missing values across all rows.
+# Range: 0.0–1.0  (0.0 = drop any column with any missing value)
+max_missing_fraction: 0.25
+
+# Drop features whose value is identical for every row (zero variance).
+drop_constant_features: true
+
+# Strategy for imputing remaining missing values before model fitting.
+# Options: median | mean | zero | none (none = raise on missing values)
+missing_value_fill: median
+
+# Sort feature columns alphabetically for reproducible column ordering.
+sort_columns: true
+
+# Log the list of selected features at INFO level before training.
+log_feature_names: true
+# Maximum number of feature names printed to console (rest are saved to used_features.json).
+max_console_logged_features: 50

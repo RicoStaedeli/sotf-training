@@ -1,0 +1,50 @@
+# XGBoost gradient-boosted trees.
+# Strong general-purpose model; handles non-linearities and feature interactions well.
+# Enable hyperparameter search with tune=xgboost.
+
+name: xgboost
+params:
+  # Loss function for the leaves.
+  # Options: reg:squarederror | reg:absoluteerror | reg:squaredlogerror
+  objective: reg:squarederror
+
+  # Number of boosting rounds (trees).
+  # Range: 100 – 2000; more = slower but potentially better fit.
+  n_estimators: 400
+
+  # Maximum tree depth. Deeper trees capture more interactions but overfit faster.
+  # Range: 3 – 12  (-1 = unlimited, not recommended)
+  max_depth: 6
+
+  # Step size per boosting round. Smaller = more conservative, needs more estimators.
+  # Range: 0.01 – 0.3
+  learning_rate: 0.05
+
+  # Minimum sum of instance weights in a leaf. Higher = more conservative splits.
+  # Range: 0.5 – 20.0
+  min_child_weight: 1.0
+
+  # Row subsampling fraction per tree. Reduces overfitting and speeds up training.
+  # Range: 0.5 – 1.0
+  subsample: 0.8
+
+  # Column subsampling fraction per tree.
+  # Range: 0.5 – 1.0
+  colsample_bytree: 0.8
+
+  # L1 regularisation on leaf weights. Promotes sparsity.
+  # Range: 0.0 – 10.0
+  reg_alpha: 0.0
+
+  # L2 regularisation on leaf weights.
+  # Range: 0.001 – 20.0
+  reg_lambda: 1.0
+
+  # Tree construction algorithm. hist = histogram-based (fast); exact = slower but precise.
+  # Options: hist | exact | approx
+  tree_method: hist
+
+  # Number of parallel threads for training.
+  n_jobs: 4
+
+  random_state: ${train.random_seed}

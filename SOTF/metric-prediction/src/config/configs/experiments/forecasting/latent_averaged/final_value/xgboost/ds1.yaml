@@ -1,0 +1,37 @@
+# @package _global_
+
+hydra:
+  job:
+    chdir: false
+dry_run: false
+
+batch_name: ds1
+output_root: metric-prediction/outputs/forecasting/latent_averaged/final_value/xgboost
+batch_root_subdir: null
+evaluation:
+  kind: forecasting
+common_overrides:
+  mode: latent_forecast
+  data.pt_train_path: metric-prediction/cache/latent_representation_datasets/ds_1_tune_zoo_cifar10_uniform_large_encoded_checkpoints/averaged/tune_zoo_cifar10_uniform_large_latent_representations_train.pt
+  data.pt_val_path: metric-prediction/cache/latent_representation_datasets/ds_1_tune_zoo_cifar10_uniform_large_encoded_checkpoints/averaged/tune_zoo_cifar10_uniform_large_latent_representations_val.pt
+  ++data.target_parquet_path: metric-prediction/cache/prepared_datasets/1_cifar10_uniform_large_full_all_metrics_long__prepared_dataset.parquet
+  data.target_column: test_acc
+  data.target_model_min_threshold: 0
+  train.random_seed: 42
+  train.save_predictions: true
+  train.save_feature_matrix: false
+  sequence.add_delta_features: true
+  sequence.include_time_features: true
+  sequence.max_lag: 3
+  sequence.min_history: 4
+  sequence.target_mode: final_value
+  model: xgboost
+
+runs:
+
+  - experiment_name: ds1_latent_xgb_final_value
+    overrides: {}
+
+  - experiment_name: ds1_latent_xgb_final_value_with_perf
+    overrides:
+      sequence.observed_metric_columns: [test_acc, train_acc, test_loss, train_loss]

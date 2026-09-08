@@ -1,0 +1,35 @@
+# Data config for forecasting mode.
+# Supports either:
+# 1. one prepared wide-form parquet, or
+# 2. a pre-split pair of weight-statistic PT files.
+#
+# In parquet mode, epoch ordering is used to build lag features across checkpoints.
+# In PT mode, the train/val split is taken directly from the supplied files.
+
+# Single-file mode: path to the prepared wide-form parquet file.
+# Set parquet_path OR the pt_train_path / pt_val_path pair.
+parquet_path: null
+
+# Pre-split mode: separate PT files for training and validation.
+# Use this when you want forecasting to mirror the latent train/val partition exactly.
+pt_train_path: null
+pt_val_path: null
+
+# Column used as the forecast target (value horizon epochs into the future).
+# Common options: test_acc | train_acc | test_loss | train_loss
+target_column: test_acc
+
+# Columns treated as metadata (not features). Kept in prediction output files.
+metadata_columns: [model_id, path, epoch, hyperparameter_key]
+
+# Restrict to a specific subset of epochs before building lag features.
+# Empty list = use all epochs. Example: [5, 10, 15, 20]
+epoch_filter: []
+
+# Drop models whose maximum target value is below this threshold. null = no filtering.
+target_model_min_threshold: null
+
+# Optional CSV with columns model_id, split_name. When set, train/val rows are
+# selected from this file instead of generating a random grouped split.
+# Rows marked test are excluded from train/validation experiments.
+split_csv_path: null

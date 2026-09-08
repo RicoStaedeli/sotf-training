@@ -1,0 +1,7 @@
+start_epoch: 10
+interval: 10
+survival_rate: 0.5
+min_population: 1
+metric_goal: maximize
+eliminate_models_missing_decision_epoch: true
+top_k_preview: 1

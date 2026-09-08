@@ -1,0 +1,64 @@
+# Learning-curve extrapolation baseline runs.
+#
+# Run from the repository root:
+#   uv run python metric-prediction/src/baselines/run_learning_curve_extrapolation.py -cn extrapolation.yaml
+#
+# The runner expands each dataset x target_modes entry into one output run.
+
+output_root: metric-prediction/outputs/baselines/learning_curve_extrapolation
+
+defaults:
+  target_column: test_acc
+  target_model_min_threshold: 0
+  metadata_columns: [model_id, path, epoch, hyperparameter_key]
+  random_seed: 42
+  validation_size: 0.2
+  curve_min_points: 3
+  save_predictions: true
+
+target_modes:
+  - target_mode: final_value
+    horizon: 5
+    min_history: 4
+
+  - target_mode: horizon_value
+    horizon: 5
+    min_history: 4
+
+datasets:
+  - name: ds1
+    plot_name: cifar10_cnn_large_uniform
+    dataset_path: metric-prediction/cache/weight_statistic_datasets/1_cifar10_uniform_large_full_all_metrics_long
+
+  - name: ds2
+    plot_name: cifar10_cnn_large_hyp_random_seeds
+    dataset_path: metric-prediction/cache/weight_statistic_datasets/2_cifar10_large_hyp_random_seeds_full_all_metrics_long
+
+  - name: ds3
+    plot_name: cifar10_cnn_large_hyp_fixed_seeds
+    dataset_path: metric-prediction/cache/weight_statistic_datasets/3_cifar10_large_hyp_fixed_seeds_full_all_metrics_long
+
+  - name: ds8
+    plot_name: stl10_cnn_large_uniform
+    dataset_path: metric-prediction/cache/weight_statistic_datasets/8_stl10_uniform_large_full_all_metrics_long
+
+  - name: ds9
+    plot_name: stl10_cnn_large_hyp_random_seeds
+    dataset_path: metric-prediction/cache/weight_statistic_datasets/9_stl10_large_hyp_random_seeds_full_all_metrics_long
+
+  - name: ds10
+    plot_name: stl10_cnn_large_hyp_fixed_seeds
+    dataset_path: metric-prediction/cache/weight_statistic_datasets/10_stl10_large_hyp_fixed_seeds_full_all_metrics_long
+
+  - name: ds14
+    plot_name: tinyimagenet_resnet18_phase_transitions
+    dataset_path: metric-prediction/cache/weight_statistic_datasets/14_phase_resnet18_tinyimagenet_width_4-256_full_all_metrics_long
+
+  - name: ds5
+    plot_name: cifar10_resnet18_width_2-256
+    dataset_path: metric-prediction/cache/weight_statistic_datasets/5_cifar10_Resnet18_width_2-256_full_all_metrics_long
+
+  - name: ds7
+    plot_name: cifar10_vit
+    dataset_path: metric-prediction/cache/weight_statistic_datasets/7_cifar10_ViT_full_all_metrics_long
+

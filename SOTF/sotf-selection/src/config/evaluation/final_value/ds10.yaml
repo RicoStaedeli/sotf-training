@@ -1,0 +1,49 @@
+batches_dir: sotf-selection/outputs/batch_experiments/final_value/ds10
+extra_batches_dirs:
+  - sotf-selection/outputs/batch_experiments/final_value/lc_baselines_ds10
+
+filters:
+  target_column: test_acc
+
+plots:
+
+  best_survivor_gap_by_experiment:
+    enabled: true
+
+  best_survivor_gap_comparison:
+    enabled: true
+
+  population_accuracy_boxplots:
+    enabled: true
+    experiments: null   # all experiments
+
+  population_accuracy_comparison_grid:
+    enabled: true
+    experiments:
+      - naive_baseline
+      - xgboost_perf_only
+      - mlp_perf_only
+      - online_xgboost_perf_only
+      - weight_statistics_xgboost
+      - weight_statistics_xgboost_with_perf
+      - weight_statistics_online_xgboost
+      - weight_statistics_online_xgboost_with_perf
+
+  parameter_sensitivity:
+    enabled: true
+    metrics: null
+
+  parameter_sensitivity_delta:
+    enabled: true
+
+  compute_savings_sensitivity:
+    enabled: true
+
+  quality_compute_pareto:
+    enabled: true
+
+  parameter_sensitivity_delta_with_compute:
+    enabled: true
+
+  efficiency_ratio:
+    enabled: true

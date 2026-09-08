@@ -1,0 +1,22 @@
+# @package _global_
+# Mode preset: time-series forecasting.
+# Trains a regressor to predict a future metric value (horizon epochs ahead)
+# using lagged weight statistics as features.
+# Defaults: XGBoost model, lag/delta/time features enabled, no Ray Tune.
+# Switch model via: model=mlp
+# Adjust horizon/lags via: sequence.horizon=10 sequence.max_lag=5
+
+defaults:
+  - /data: forecasting      # same prepared parquet; epoch ordering matters here
+  - /features: default      # feature filtering applied before lag expansion
+  - /logging: default
+  - /model: xgboost         # options: xgboost | mlp
+  - /sequence: default      # lag features, delta features, time features
+  - /train: forecasting     # no shuffle; artifacts_root instead of artifacts_dir
+  - /tune: disabled         # Ray Tune not wired for forecasting mode
+
+mode: forecasting
+
+hydra:
+  run:
+    dir: metric-prediction/outputs_forecasting/${now:%Y-%m-%d}/${path_safe:${experiment_name}}/${now:%H-%M-%S-%f}

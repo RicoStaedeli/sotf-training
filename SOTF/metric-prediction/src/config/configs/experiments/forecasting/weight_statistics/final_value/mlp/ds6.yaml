@@ -1,0 +1,64 @@
+# @package _global_
+
+hydra:
+  job:
+    chdir: false
+dry_run: false
+
+batch_name: ds6
+output_root: metric-prediction/outputs/forecasting/weight_statistics/final_value/mlp
+batch_root_subdir: null
+evaluation:
+  kind: forecasting
+
+common_overrides:
+  mode: forecasting
+  data.target_column: test_acc
+  data.target_model_min_threshold: 0
+  data.parquet_path: metric-prediction/cache/prepared_datasets/6_cifar10_Resnet50_width_2-256_full_all_metrics_long__prepared_dataset.parquet
+  train.random_seed: 42
+  train.save_predictions: true
+  train.save_feature_matrix: false
+  features.include_model_metrics: true
+  features.metric_families: [distribution]
+  sequence.target_mode: final_value
+  model: mlp
+
+runs:
+
+  - experiment_name: ds6_ws_fv_lag3_delta_layer_mlp
+    overrides:
+      features.include_layer_metrics: true
+      sequence.add_delta_features: true
+      sequence.include_time_features: true
+      sequence.max_lag: 3
+      sequence.min_history: 4
+
+  - experiment_name: ds6_ws_fv_lag3_delta_layer_mlp_with_perf
+    overrides:
+      features.include_layer_metrics: true
+      sequence.add_delta_features: true
+      sequence.include_time_features: true
+      sequence.max_lag: 3
+      sequence.min_history: 4
+      sequence.observed_metric_columns: [test_acc, train_acc, test_loss, train_loss]
+
+  - experiment_name: ds6_ws_fv_nolag_perf_only
+    overrides:
+      features.include_model_metrics: false
+      features.include_layer_metrics: false
+      sequence.add_delta_features: false
+      sequence.include_time_features: false
+      sequence.max_lag: 0
+      sequence.min_history: 0
+      sequence.observed_metric_columns: [test_acc, train_acc, test_loss, train_loss]
+
+  - experiment_name: ds6_ws_fv_lag3_delta_perf_only
+    overrides:
+      features.include_model_metrics: false
+      features.include_layer_metrics: false
+      sequence.add_delta_features: true
+      sequence.include_time_features: true
+      sequence.max_lag: 3
+      sequence.min_history: 4
+      sequence.observed_metric_columns: [test_acc, train_acc, test_loss, train_loss]

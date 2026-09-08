@@ -1,0 +1,54 @@
+# Experiment configuration
+trainer: "SANETrainer"     # Which SANETrainer class to use
+device: "cuda"             # Device on which the experiment is run
+seed: 2020                 # Random seed for reproducibility
+monitor_memory: True       # Whether to output the memory usage during the training of the SANE model
+epochs: 1000               # Number of training epochs
+validation_frequency: 10   # At which frequency (in epochs) to run a validation step
+checkpoint_frequency: 10   # At which frequency (in epochs) to save a checkpoint
+view_1_canon_train: false  # Whether to use the canonical view as the input, at training. When not using the contrastive learning framework, this should almost always be false.
+view_1_canon_valid: true   # Whether to use the canonical view as the input, at validation.
+
+# AMP (Automatic Mixed Precision) configuration
+use_amp: true               # Whether to use automatic mixed precision training
+amp_dtype: "float16"        # AMP dtype: "float16" or "bfloat16" (bfloat16 has better numerical stability on newer GPUs)
+max_grad_norm: null         # Maximum gradient norm for gradient clipping (null = disabled)
+
+# Running configuration
+num_cpus: 64                # Total number of CPUs available
+num_gpus: 1                 # Total number of GPUs available
+cpu_per_trial: 64           # Number of CPUs per trial
+gpu_per_trial: 1            # Number of GPUs per trial
+num_samples: 1              # Number of Ray Tune samples
+num_checkpoints_to_keep: 3  # Number of checkpoints to keep (Ray)
+ray_verbose: 3              # Ray Tune verbosity level
+
+wandb_project: "msthesis"
+wandb_group: "phasetransition-runs"
+wandb_api_key_file: "/netscratch1/rstaedeli/local/env/wandb.txt"
+
+# Experiment name
+experiment_name: "6_cifar10_Resnet50_width_2-256_modewitdth"
+
+# Root directory for all experiments. Results will be saved in `root_dir/experiment_name`
+root_dir: "/netscratch1/rstaedeli/local/experiments"
+
+data:
+  batch_size: 128
+  splitter: "ModelGroupSplitter"           # Available: "RandomSplitter", "ModelGroupSplitter", "ModelWidthGroupSplitter", "HyperparameterGroupSplitter"
+  checkpoints_dataset: cifar10_resnet50_width_2_256
+  tokens_dataset:
+    cache_dir: "/local/cache/ds_6_fast/"
+
+model:
+  max_positions: [1500000, 128, 8192]       # Maximum number of positions (tokens) in the input position embeddings. This should be set to a value larger than the number of tokens that the model will see during training, validation, and testing. The first value is used for the encoder, the second for the decoder (if using a separate decoder), and the third for the translator (if using a separate translator). If only one value is provided, it is used for all components.
+
+defaults:
+  - _base_
+  - data: cifar10_resnet18
+  - loss: reconstruction
+  - model: sane_no_contrast_small
+  - optimizer: adamw
+  - scheduler: onecyclelr
+  - downstream_tasks: discriminative
+  - _self_

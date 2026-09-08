@@ -1,0 +1,7 @@
+# Feature config for latent mode.
+# Latent vectors (z_* dimensions) are used as-is without any filtering or imputation.
+# The loader guarantees complete, clean embeddings so no fill strategy is needed.
+
+# Options: median | mean | zero | none
+# Must stay "none" for latent mode — the z_* columns are always fully populated.
+missing_value_fill: none

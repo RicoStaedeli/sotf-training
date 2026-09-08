@@ -1,0 +1,24 @@
+common_overrides:
+  data.target_column: test_acc
+  sequence.target_mode: horizon_value
+  sequence.horizon: 5
+
+predictor:
+  name: online_lc_extrapolation
+
+batch_name: lc_baselines/horizon_value/ds10
+
+runs:
+  - experiment_name: lc_extrapolation_baseline
+    predictor:
+      name: online_lc_extrapolation
+    overrides:
+      data.pt_path: metric-prediction/cache/weight_statistic_datasets/10_stl10_large_hyp_fixed_seeds_full_all_metrics_long/weight_statistics_test.pt
+      data.pt_val_path: metric-prediction/cache/weight_statistic_datasets/10_stl10_large_hyp_fixed_seeds_full_all_metrics_long/weight_statistics_val.pt
+
+  - experiment_name: lcnet_baseline
+    predictor:
+      name: online_lcnet
+    overrides:
+      data.pt_path: metric-prediction/cache/weight_statistic_datasets/10_stl10_large_hyp_fixed_seeds_full_all_metrics_long/weight_statistics_test.pt
+      data.pt_val_path: metric-prediction/cache/weight_statistic_datasets/10_stl10_large_hyp_fixed_seeds_full_all_metrics_long/weight_statistics_val.pt

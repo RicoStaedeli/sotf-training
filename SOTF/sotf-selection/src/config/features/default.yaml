@@ -1,0 +1,18 @@
+include_model_metrics: true
+include_layer_metrics: true
+
+metric_families: []
+metrics: []
+scopes: []
+layer_types: []
+
+include_feature_names: []
+exclude_feature_names: []
+include_feature_patterns: []
+exclude_feature_patterns: []
+max_missing_fraction: 0.25
+drop_constant_features: true
+missing_value_fill: median
+sort_columns: true
+log_feature_names: false
+max_console_logged_features: 50

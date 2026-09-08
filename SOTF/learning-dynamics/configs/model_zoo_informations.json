@@ -1,0 +1,100 @@
+[
+    {
+        "zoo_name": "1_cifar10_uniform_large",
+        "plot_name": "cifar10_cnn_large_uniform",
+        "model_type": "CNN3",
+        "dataset": "cifar10",
+        "Initialization": "Kaiming Uniform"
+    },
+    {
+        "zoo_name": "2_cifar10_large_hyp_random_seeds",
+        "plot_name": "cifar10_cnn_large_hyp_random_seeds",
+        "model_type": "CNN3",
+        "dataset": "cifar10",
+        "Initialization": "Hyperparameter Search"
+    },
+    {
+        "zoo_name": "3_cifar10_large_hyp_fixed_seeds",
+        "plot_name": "cifar10_cnn_large_hyp_fixed_seeds",
+        "model_type": "CNN3",
+        "dataset": "cifar10",
+        "Initialization": "Hyperparameter Fixed"
+    },
+    {
+        "zoo_name": "4_cifar10_resnet18_kaiming",
+        "plot_name": "cifar10_resnet18_kaiming",
+        "model_type": "ResNet18",
+        "dataset": "cifar10",
+        "Initialization": "Kaiming Uniform"
+    },
+    {
+        "zoo_name": "5_cifar10_Resnet18_width_2-256",
+        "plot_name": "cifar10_resnet18_width_2-256",
+        "model_type": "ResNet18_Width_2-256",
+        "dataset": "cifar10",
+        "Initialization": "Phase Transitions"
+    },
+    {
+        "zoo_name": "6_cifar10_Resnet50_width_2-256",
+        "plot_name": "cifar10_resnet50_width_2-256",
+        "model_type": "ResNet50_Width_2-256",
+        "dataset": "cifar10",
+        "Initialization": "Kaiming Uniform"
+    },
+    {
+        "zoo_name": "7_cifar10_ViT",
+        "plot_name": "cifar10_vit",
+        "model_type": "ViT",
+        "dataset": "cifar10",
+        "Initialization": "ADAMW"
+    },
+    {
+        "zoo_name": "8_stl10_uniform_large",
+        "plot_name": "stl10_cnn_large_uniform",
+        "model_type": "CNN3",
+        "dataset": "stl10",
+        "Initialization": "Kaiming Uniform"
+    },
+    {
+        "zoo_name": "9_stl10_large_hyp_random_seeds",
+        "plot_name": "stl10_cnn_large_hyp_random_seeds",
+        "model_type": "CNN3",
+        "dataset": "stl10",
+        "Initialization": "Hyperparameter Search"
+    },
+    {
+        "zoo_name": "10_stl10_large_hyp_fixed_seeds",
+        "plot_name": "stl10_cnn_large_hyp_fixed_seeds",
+        "model_type": "CNN3",
+        "dataset": "stl10",
+        "Initialization": "Hyperparameter Search Fixed"
+    },
+    {
+        "zoo_name": "11_tinyimagenet_resnet18_kaiming",
+        "plot_name": "tinyimagenet_resnet18_kaiming",
+        "model_type": "ResNet18",
+        "dataset": "tinyimagenet",
+        "Initialization": "Kaiming Uniform"
+    },
+    {
+        "zoo_name": "12_phase_resnet18_tinyimagenet",
+        "plot_name": "-!- tinyimagenet_resnet18_phase_transitions_unused -!-",
+        "model_type": "ResNet18",
+        "dataset": "tinyimagenet",
+        "Initialization": "Phase Transitions"
+    },
+    {
+        "zoo_name": "13_phase_resnet50_tinyimagenet",
+        "plot_name": "tinyimagenet_resnet50_phase_transitions",
+        "model_type": "ResNet50",
+        "dataset": "tinyimagenet",
+        "Initialization": "Phase Transitions"
+    },
+    {
+        "zoo_name": "14_phase_resnet18_tinyimagenet_width_4-256",
+        "plot_name": "tinyimagenet_resnet18_phase_transitions",
+        "model_type": "ResNet18_Width_4-256",
+        "dataset": "tinyimagenet",
+        "Initialization": "Phase Transitions"
+    }
+]

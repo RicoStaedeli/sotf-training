@@ -1,0 +1,218 @@
+# @package _global_
+# Distribution-only features for DS1-DS12 at epoch 50.
+# Run with:
+#   uv run metric-prediction/runner.py -cn experiments/prediction/exp_1_distribution_epoch50
+
+hydra:
+  job:
+    chdir: false
+
+dry_run: false
+
+batch_name: Exp_1_Distribution_Epoch50
+output_root: metric-prediction/outputs_prediction
+
+evaluation:
+  kind: prediction
+
+common_overrides:
+  mode: prediction
+  train.save_shap_artifacts: true
+  data.target_column: test_acc
+  data.epoch_filter: [50]
+  features.metric_families: [distribution]
+  features.include_model_metrics: true
+  features.include_layer_metrics: true
+
+runs:
+  # --- DS1: CIFAR-10 uniform large ---
+  - experiment_name: ds1_ridge_distribution_epoch50
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/1_cifar10_uniform_large_full_all_metrics_long__prepared_dataset.parquet
+      model: ridge
+
+  - experiment_name: ds1_lightgbm_distribution_epoch50
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/1_cifar10_uniform_large_full_all_metrics_long__prepared_dataset.parquet
+      model: lightgbm
+
+  - experiment_name: ds1_xgboost_distribution_epoch50
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/1_cifar10_uniform_large_full_all_metrics_long__prepared_dataset.parquet
+      model: xgboost
+
+  # --- DS2: CIFAR-10 large hyp random seeds ---
+  - experiment_name: ds2_ridge_distribution_epoch50
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/2_cifar10_large_hyp_random_seeds_full_all_metrics_long__prepared_dataset.parquet
+      model: ridge
+
+  - experiment_name: ds2_lightgbm_distribution_epoch50
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/2_cifar10_large_hyp_random_seeds_full_all_metrics_long__prepared_dataset.parquet
+      model: lightgbm
+
+  - experiment_name: ds2_xgboost_distribution_epoch50
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/2_cifar10_large_hyp_random_seeds_full_all_metrics_long__prepared_dataset.parquet
+      model: xgboost
+
+  # --- DS3: CIFAR-10 large hyp fixed seeds ---
+  - experiment_name: ds3_ridge_distribution_epoch50
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/3_cifar10_large_hyp_fixed_seeds_full_all_metrics_long__prepared_dataset.parquet
+      model: ridge
+
+  - experiment_name: ds3_lightgbm_distribution_epoch50
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/3_cifar10_large_hyp_fixed_seeds_full_all_metrics_long__prepared_dataset.parquet
+      model: lightgbm
+
+  - experiment_name: ds3_xgboost_distribution_epoch50
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/3_cifar10_large_hyp_fixed_seeds_full_all_metrics_long__prepared_dataset.parquet
+      model: xgboost
+
+  # --- DS4: CIFAR-10 ResNet-18 Kaiming ---
+  - experiment_name: ds4_ridge_distribution_epoch50
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/4_cifar10_resnet18_kaiming_full_all_metrics_long__prepared_dataset.parquet
+      model: ridge
+
+  - experiment_name: ds4_lightgbm_distribution_epoch50
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/4_cifar10_resnet18_kaiming_full_all_metrics_long__prepared_dataset.parquet
+      model: lightgbm
+
+  - experiment_name: ds4_xgboost_distribution_epoch50
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/4_cifar10_resnet18_kaiming_full_all_metrics_long__prepared_dataset.parquet
+      model: xgboost
+
+  # --- DS5: CIFAR-10 ResNet-18 width sweep ---
+  - experiment_name: ds5_ridge_distribution_epoch50
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/5_cifar10_Resnet18_width_2-256_full_all_metrics_long__prepared_dataset.parquet
+      model: ridge
+
+  - experiment_name: ds5_lightgbm_distribution_epoch50
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/5_cifar10_Resnet18_width_2-256_full_all_metrics_long__prepared_dataset.parquet
+      model: lightgbm
+
+  - experiment_name: ds5_xgboost_distribution_epoch50
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/5_cifar10_Resnet18_width_2-256_full_all_metrics_long__prepared_dataset.parquet
+      model: xgboost
+
+  # --- DS6: CIFAR-10 ResNet-50 width sweep ---
+  - experiment_name: ds6_ridge_distribution_epoch50
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/6_cifar10_Resnet50_width_2-256_full_all_metrics_long__prepared_dataset.parquet
+      model: ridge
+
+  - experiment_name: ds6_lightgbm_distribution_epoch50
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/6_cifar10_Resnet50_width_2-256_full_all_metrics_long__prepared_dataset.parquet
+      model: lightgbm
+
+  - experiment_name: ds6_xgboost_distribution_epoch50
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/6_cifar10_Resnet50_width_2-256_full_all_metrics_long__prepared_dataset.parquet
+      model: xgboost
+
+  # --- DS7: CIFAR-10 ViT ---
+  - experiment_name: ds7_ridge_distribution_epoch50
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/7_cifar10_ViT_full_all_metrics_long__prepared_dataset.parquet
+      model: ridge
+
+  - experiment_name: ds7_lightgbm_distribution_epoch50
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/7_cifar10_ViT_full_all_metrics_long__prepared_dataset.parquet
+      model: lightgbm
+
+  - experiment_name: ds7_xgboost_distribution_epoch50
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/7_cifar10_ViT_full_all_metrics_long__prepared_dataset.parquet
+      model: xgboost
+
+  # --- DS8: STL-10 uniform large ---
+  - experiment_name: ds8_ridge_distribution_epoch50
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/8_stl10_uniform_large_full_all_metrics_long__prepared_dataset.parquet
+      model: ridge
+
+  - experiment_name: ds8_lightgbm_distribution_epoch50
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/8_stl10_uniform_large_full_all_metrics_long__prepared_dataset.parquet
+      model: lightgbm
+
+  - experiment_name: ds8_xgboost_distribution_epoch50
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/8_stl10_uniform_large_full_all_metrics_long__prepared_dataset.parquet
+      model: xgboost
+
+  # --- DS9: STL-10 large hyp random seeds ---
+  - experiment_name: ds9_ridge_distribution_epoch50
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/9_stl10_large_hyp_random_seeds_full_all_metrics_long__prepared_dataset.parquet
+      model: ridge
+
+  - experiment_name: ds9_lightgbm_distribution_epoch50
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/9_stl10_large_hyp_random_seeds_full_all_metrics_long__prepared_dataset.parquet
+      model: lightgbm
+
+  - experiment_name: ds9_xgboost_distribution_epoch50
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/9_stl10_large_hyp_random_seeds_full_all_metrics_long__prepared_dataset.parquet
+      model: xgboost
+
+  # --- DS10: STL-10 large hyp fixed seeds ---
+  - experiment_name: ds10_ridge_distribution_epoch50
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/10_stl10_large_hyp_fixed_seeds_full_all_metrics_long__prepared_dataset.parquet
+      model: ridge
+
+  - experiment_name: ds10_lightgbm_distribution_epoch50
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/10_stl10_large_hyp_fixed_seeds_full_all_metrics_long__prepared_dataset.parquet
+      model: lightgbm
+
+  - experiment_name: ds10_xgboost_distribution_epoch50
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/10_stl10_large_hyp_fixed_seeds_full_all_metrics_long__prepared_dataset.parquet
+      model: xgboost
+
+  # --- DS11: TinyImageNet ResNet-18 Kaiming ---
+  - experiment_name: ds11_ridge_distribution_epoch50
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/11_tinyimagenet_resnet18_kaiming_full_all_metrics_long__prepared_dataset.parquet
+      model: ridge
+
+  - experiment_name: ds11_lightgbm_distribution_epoch50
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/11_tinyimagenet_resnet18_kaiming_full_all_metrics_long__prepared_dataset.parquet
+      model: lightgbm
+
+  - experiment_name: ds11_xgboost_distribution_epoch50
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/11_tinyimagenet_resnet18_kaiming_full_all_metrics_long__prepared_dataset.parquet
+      model: xgboost
+
+  # --- DS12: Phase ResNet-18 TinyImageNet ---
+  - experiment_name: ds12_ridge_distribution_epoch50
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/12_phase_resnet18_tinyimagenet_full_all_metrics_long__prepared_dataset.parquet
+      model: ridge
+
+  - experiment_name: ds12_lightgbm_distribution_epoch50
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/12_phase_resnet18_tinyimagenet_full_all_metrics_long__prepared_dataset.parquet
+      model: lightgbm
+
+  - experiment_name: ds12_xgboost_distribution_epoch50
+    overrides:
+      data.parquet_path: metric-prediction/cache/prepared_datasets/12_phase_resnet18_tinyimagenet_full_all_metrics_long__prepared_dataset.parquet
+      model: xgboost

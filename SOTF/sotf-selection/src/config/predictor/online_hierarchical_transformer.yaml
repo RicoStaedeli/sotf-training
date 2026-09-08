@@ -1,0 +1,32 @@
+name: online_hierarchical_transformer
+min_train_rows: 10
+min_train_models: 2
+fallback_strategy: current_target
+include_observed_metrics: true
+observed_metric_columns: [current_target, test_acc, train_acc, test_loss, train_loss]
+params:
+  d_model: 64
+  nhead: 4
+  num_local_layers: 1
+  num_global_layers: 2
+  local_window_size: 1
+  dim_feedforward: 128
+  dropout: 0.0
+  head_hidden_layer_sizes: [32]
+  use_positional_encoding: true
+  batch_size: 16
+  learning_rate: 0.001
+  weight_decay: 0.001
+  max_epochs: 150
+  patience: 20
+  validation_fraction: 0.15
+  early_stopping: true
+  scheduler_factor: 0.5
+  scheduler_patience: 8
+  min_learning_rate: 0.00001
+  gradient_clip_norm: 1.0
+  scale_features: true
+  scale_target: true
+  loss: smooth_l1
+  device: auto
+  random_state: 42

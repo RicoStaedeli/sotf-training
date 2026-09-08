@@ -1,0 +1,21 @@
+# @package _global_
+# Mode preset: latent-representation prediction.
+# Loads latent vectors (z_* dimensions) from a .pt checkpoint file and a
+# separate target parquet, then trains a regressor on those embeddings.
+# Defaults: small MLP, no feature filtering, no SHAP, no sequence features.
+# Switch model via: model=ridge | model=xgboost
+
+defaults:
+  - /data: latent           # .pt file + target parquet; different loader than prediction
+  - /features: latent       # no filtering; forces missing_value_fill=none
+  - /logging: default
+  - /model: mlp_latent      # options: mlp_latent | mlp | ridge | xgboost
+  - /sequence: none         # no lag / horizon features
+  - /train: default         # SHAP disabled by default (save_shap_artifacts=false)
+  - /tune: disabled
+
+mode: latent
+
+hydra:
+  run:
+    dir: metric-prediction/outputs/single_experiments/${now:%Y-%m-%d}/${path_safe:${experiment_name}}/${now:%H-%M-%S-%f}

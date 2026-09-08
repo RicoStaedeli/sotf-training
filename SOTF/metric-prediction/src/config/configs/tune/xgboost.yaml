@@ -1,0 +1,56 @@
+# Ray Tune config for XGBoost hyperparameter search.
+# Activate with: tune=xgboost model=xgboost
+
+enabled: true
+experiment_name: xgboost_tune
+
+# Total number of hyperparameter configurations to trial.
+num_samples: 6
+
+# Metric and direction used to pick the best trial.
+# Options: rmse | mae | r2  /  min | max
+metric: rmse
+mode: min
+
+# Parallel trials. Increase if you have more CPUs available.
+max_concurrent_trials: 4
+resources_per_trial:
+  cpu: 6
+  gpu: 0
+
+# Search space: each key maps to a sampler and its bounds.
+# Supported samplers: randint | uniform | loguniform | choice
+# Only parameters listed here are tuned; all others keep their model/*.yaml values.
+search_space:
+  n_estimators:
+    sampler: randint
+    lower: 200
+    upper: 900
+  max_depth:
+    sampler: randint
+    lower: 3
+    upper: 10
+  learning_rate:
+    sampler: loguniform
+    lower: 0.01
+    upper: 0.3
+  min_child_weight:
+    sampler: loguniform
+    lower: 0.5
+    upper: 10.0
+  subsample:
+    sampler: uniform
+    lower: 0.6
+    upper: 1.0
+  colsample_bytree:
+    sampler: uniform
+    lower: 0.6
+    upper: 1.0
+  reg_alpha:
+    sampler: loguniform
+    lower: 1.0e-8
+    upper: 10.0
+  reg_lambda:
+    sampler: loguniform
+    lower: 1.0e-3
+    upper: 20.0

@@ -1,0 +1,44 @@
+# Data config for latent_forecast mode.
+# Loads per-epoch latent embeddings from a PyTorch .pt file and pairs them with
+# current-epoch target values from a prepared parquet file.
+#
+# The .pt file must contain three parallel arrays (one entry per (model, epoch) row):
+#   - model IDs  : list/array of strings (key must contain "id" or "model")
+#   - epoch indices : list/array of ints  (key must contain "epoch" or "step")
+#   - embeddings  : either
+#                   * average mode: float Tensor of shape (n_rows, n_dims)
+#                   * windows mode: list of tensors, each [n_windows_i, n_dims]
+#                   (key must contain "embed", "z", "latent", "vec", or "repr")
+#
+# The target parquet must be a prepared wide-form parquet with columns:
+#   model_id, epoch, <target_column>
+# This is the same file used by prediction/forecasting modes.
+
+# Single-file mode: path to one .pt file containing all models (train + val combined).
+# The pipeline will perform a random model-grouped split internally.
+# Set pt_path OR the pt_train_path / pt_val_path pair — not both.
+pt_path: null
+
+# Pre-split mode: separate .pt files for training and validation models.
+# When pt_train_path is set, pt_val_path must also be set and pt_path is ignored.
+# Use this when the model zoo has a predefined train/val partition (e.g. from the
+# encoding pipeline that mirrors the weight-statistic dataset splits).
+pt_train_path: null
+pt_val_path: null
+
+# Absolute path to a prepared wide-form parquet file containing
+# (model_id, epoch, target_column) rows used to attach current target values.
+target_parquet_path: null
+
+# Column in the target parquet used as the regression target (and forecast target).
+# Common options: test_acc | train_acc | test_loss | train_loss
+target_column: test_acc
+
+# Drop models whose maximum observed target value is below this threshold.
+# Mirrors the same field in forecasting.yaml for consistent filtering.
+# null = no filtering.
+target_model_min_threshold: null
+
+# Normalise model IDs by stripping directory prefixes (basename only).
+# Set to true when .pt keys use bare filenames but parquet uses full paths.
+id_normalize_basename: true

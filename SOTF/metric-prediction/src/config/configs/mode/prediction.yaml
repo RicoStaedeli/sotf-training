@@ -1,0 +1,21 @@
+# @package _global_
+# Mode preset: standard metric prediction (cross-sectional regression).
+# Trains a regressor to predict a metric at a given epoch from weight statistics.
+# Defaults: Ridge model, no sequence features, Ray Tune disabled.
+# Switch model via: model=xgboost | model=lightgbm
+# Enable tuning via:  tune=xgboost | tune=lightgbm | tune=ridge
+
+defaults:
+  - /data: prediction       # prepared wide-form parquet (model_id × epoch rows)
+  - /features: default      # full feature filtering with pattern / family support
+  - /logging: default
+  - /model: ridge           # options: ridge | xgboost | lightgbm | mlp
+  - /sequence: none         # no lag / horizon features
+  - /train: default         # includes SHAP artifact saving
+  - /tune: disabled         # options: disabled | ridge | xgboost | lightgbm
+
+mode: prediction
+
+hydra:
+  run:
+    dir: metric-prediction/outputs/single_experiments/${now:%Y-%m-%d}/${path_safe:${experiment_name}}/${now:%H-%M-%S-%f}
