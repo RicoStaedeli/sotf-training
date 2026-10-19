@@ -4,14 +4,14 @@ This repository contains the full implementation for **Survival-of-the-Fittest t
 
 The codebase is organized into two parts that together cover the whole pipeline described in the paper:
 
-- **[`SANE/`](SANE)** — the Sequential Autoencoder for Neural Embeddings, used to learn structured latent representations of neural-network checkpoints.
+- **[`SANE/`](SANE)** — the Sequential Autoencoder for Neural Embeddings [1], used to learn structured latent representations of neural-network checkpoints.
 - **[`SOTF/`](SOTF)** — the analysis, prediction, and selection pipeline: extracting weight statistics and learning-curve features from checkpointed model zoos, training the performance nowcasters (weight-statistic, SANE-latent, and learning-curve predictor families), and running the retrospective SOTF training simulation.
 
 ## Paper Summary
 
 Selecting a neural network from many candidate runs is expensive because each is typically trained to completion, and stopping runs early is risky when learning curves cross and early leaders do not ultimately perform best. We ask whether intermediate checkpoint weights reveal how a model's performance will develop.
 
-Across nine image-classification model zoos — CNNs, width-varying ResNet-18s, and Vision Transformers on CIFAR-10, STL-10, and Tiny ImageNet — we:
+Across nine image-classification model zoos — CNNs, width-varying ResNet-18s, and Vision Transformers on CIFAR-10, STL-10, and Tiny ImageNet [1,2] — we:
 
 1. **Characterize ranking dynamics**: quantify pairwise rank cross-overs and rank-correlation instability throughout training.
 2. **Train performance nowcasters**: predict test accuracy five epochs ahead or at the end of training, from observed accuracy/loss histories, engineered weight statistics, and learned SANE checkpoint representations.
@@ -47,17 +47,17 @@ Survival-of-the-Fittest Training  (SOTF/sotf-selection)
 ## Repository Layout
 
 ```
-SANE/                       Sequential Autoencoder for Neural Embeddings
+SANE/                      Sequential Autoencoder for Neural Embeddings
 ├── src/sane/                model, trainer, runner, orchestrator, data, generative, downstream
 ├── config/                  Hydra configs for SANE training runs
 ├── scripts/                 Utility and analysis scripts
 ├── tests/                   Unit tests
 └── run.py                   Entry point for SANE training
 
-SOTF/                        Model-zoo analysis, nowcasting, and SOTF training simulation
-├── learning-dynamics/        Weight statistics extraction and ranking-dynamics analysis (Hydra-based)
-├── metric-prediction/        Nowcasting predictors and time-series forecasting (Ray Tune-enabled)
-└── sotf-selection/           Survival-of-the-Fittest training simulation
+SOTF/                      Model-zoo analysis, nowcasting, and SOTF training simulation
+├── learning-dynamics/       Weight statistics extraction and ranking-dynamics analysis 
+├── metric-prediction/       Nowcasting predictors and time-series forecasting
+└── sotf-selection/          Survival-of-the-Fittest training simulation
 ```
 
 Each subdirectory has its own README with setup and usage instructions:
@@ -91,22 +91,41 @@ See the section READMEs linked above for full configuration options, data prepar
 
 Experiments span nine checkpointed image-classification model zoos:
 
-| Dataset name | Image data | Architecture | Population | Models | Epochs |
-|---|---|---|---|---|---|
-| cifar10_cnn_large_uniform | CIFAR-10 | CNN (large) | Uniform | 1000 | 50 |
-| cifar10_cnn_large_hyp_random_seeds | CIFAR-10 | CNN (large) | Hyp. random | 1280 | 50 |
-| cifar10_cnn_large_hyp_fixed_seeds | CIFAR-10 | CNN (large) | Hyp. fixed | 1280 | 50 |
-| stl10_cnn_large_uniform | STL-10 | CNN (large) | Uniform | 1000 | 50 |
-| stl10_cnn_large_hyp_random_seeds | STL-10 | CNN (large) | Hyp. random | 2560 | 50 |
-| stl10_cnn_large_hyp_fixed_seeds | STL-10 | CNN (large) | Hyp. fixed | 2560 | 50 |
-| tinyimagenet_resnet18_phase_transitions | Tiny ImageNet | ResNet-18 (width) | Phase transitions | 192 | 100 |
-| cifar10_resnet18_width_2-256 | CIFAR-10 | ResNet-18 (width) | Phase transitions | 192 | 150 |
-| cifar10_vit | CIFAR-10 | ViT | Phase transitions | 147 | 300 |
+| Dataset name | Image data | Architecture | Population | Models | Epochs | Source |
+|---|---|---|---|---|---|---|
+| cifar10_cnn_large_uniform | CIFAR-10 | CNN (large) | Uniform | 1000 | 50 | [Zenodo 6620869](https://zenodo.org/records/6620869) |
+| cifar10_cnn_large_hyp_random_seeds | CIFAR-10 | CNN (large) | Hyp. random | 1280 | 50 | [Zenodo 6620869](https://zenodo.org/records/6620869) |
+| cifar10_cnn_large_hyp_fixed_seeds | CIFAR-10 | CNN (large) | Hyp. fixed | 1280 | 50 | [Zenodo 6620869](https://zenodo.org/records/6620869) |
+| stl10_cnn_large_uniform | STL-10 | CNN (large) | Uniform | 1000 | 50 | [Zenodo 6631784](https://zenodo.org/records/6631784) |
+| stl10_cnn_large_hyp_random_seeds | STL-10 | CNN (large) | Hyp. random | 2560 | 50 | [Zenodo 6631784](https://zenodo.org/records/6631784) |
+| stl10_cnn_large_hyp_fixed_seeds | STL-10 | CNN (large) | Hyp. fixed | 2560 | 50 | [Zenodo 6631784](https://zenodo.org/records/6631784) |
+| tinyimagenet_resnet18_phase_transitions | Tiny ImageNet | ResNet-18 (width) | Phase transitions | 192 | 100 | [Phase Transition Model Zoo](https://github.com/ModelZoos/PhaseTransitionModelZoo) |
+| cifar10_resnet18_width_2-256 | CIFAR-10 | ResNet-18 (width) | Phase transitions | 192 | 150 | [Phase Transition Model Zoo](https://github.com/ModelZoos/PhaseTransitionModelZoo) |
+| cifar10_vit | CIFAR-10 | ViT | Phase transitions | 147 | 300 | [Phase Transition Model Zoo](https://github.com/ModelZoos/PhaseTransitionModelZoo) |
+
+The CNN zoos come from the [Model Zoos dataset](https://github.com/ModelZoos/ModelZooDataset) (Schürholt et al., NeurIPS 2022 Datasets & Benchmarks). The ResNet-18 and ViT zoos come from [A Model Zoo on Phase Transitions in Neural Networks](https://arxiv.org/abs/2504.18072) (Schürholt et al., 2025).
 
 ## Citation
 
 If you use this code, please cite the paper:
+```
+@inproceedings{
+staedeli2026nowcasting,
+title={Nowcasting Future Performance for Population Pruning in Survival-of-the-Fittest Training},
+author={Rico Staedeli and L{\'e}o Meynent and Boris Knyazev and Damian Borth},
+booktitle={Neural Network Artifacts as a New Data Modality},
+year={2026},
+url={https://openreview.net/forum?id=WGn5PuwMIi}
+}
+```
 
 ## License
 
 SANE is released under the MIT License (see [SANE/LICENSE](SANE/LICENSE)).
+
+## References
+[1] K. Schürholt, M. W. Mahoney, and D. Borth, “Towards Scalable and Versatile Weight Space Learning,” Jun. 14, 2024, arXiv: arXiv:2406.09997. doi: 10.48550/arXiv.2406.09997.
+
+[2] K. Schürholt, L. Meynent, Y. Zhou, H. Lu, Y. Yang, and D. Borth, “A Model Zoo on Phase Transitions in Neural Networks,” Sep. 29, 2025, arXiv: arXiv:2504.18072. doi: 10.48550/arXiv.2504.18072.
+
+
